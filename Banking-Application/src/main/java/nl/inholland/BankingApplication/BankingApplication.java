@@ -11,7 +11,5 @@ public class BankingApplication {
 		System.out.println("Lekker hij werkt joepie!");
 		System.out.println("Sam is the king!!");
 	}
-
-
-
+	
 }
