@@ -23,11 +23,11 @@ import javax.validation.Valid;
 import javax.validation.constraints.*;
 import java.util.List;
 import java.util.Map;
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2020-05-05T12:28:13.386Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2020-05-05T12:47:35.450Z[GMT]")
 @Api(value = "account", description = "the account API")
 public interface AccountApi {
 
-    @ApiOperation(value = "Creates an account for a user", nickname = "createAcc", notes = "", tags={ "account", })
+    @ApiOperation(value = "Creates an account for a user", nickname = "createAcc", notes = "", tags={ "accounts", })
     @ApiResponses(value = { 
         @ApiResponse(code = 405, message = "Invalid input") })
     @RequestMapping(value = "/account",
@@ -37,7 +37,7 @@ public interface AccountApi {
 );
 
 
-    @ApiOperation(value = "Deletes an account", nickname = "deleteAcc", notes = "", tags={ "account", })
+    @ApiOperation(value = "Deletes an account", nickname = "deleteAcc", notes = "", tags={ "accounts", })
     @ApiResponses(value = { 
         @ApiResponse(code = 400, message = "Invalid ID supplied"),
         @ApiResponse(code = 404, message = "Account not found") })

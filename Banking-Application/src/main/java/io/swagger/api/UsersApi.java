@@ -23,11 +23,11 @@ import javax.validation.Valid;
 import javax.validation.constraints.*;
 import java.util.List;
 import java.util.Map;
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2020-05-05T12:28:13.386Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2020-05-05T12:47:35.450Z[GMT]")
 @Api(value = "users", description = "the users API")
 public interface UsersApi {
 
-    @ApiOperation(value = "Create user", nickname = "createUser", notes = "This can only be done by admin form the bank.", tags={ "user", })
+    @ApiOperation(value = "Create user", nickname = "createUser", notes = "This can only be done by admin form the bank.", tags={ "users", })
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "successful operation") })
     @RequestMapping(value = "/users",
@@ -36,7 +36,7 @@ public interface UsersApi {
 );
 
 
-    @ApiOperation(value = "Delete user", nickname = "deleteUser", notes = "This can only be done by de admin.", tags={ "user", })
+    @ApiOperation(value = "Delete user", nickname = "deleteUser", notes = "This can only be done by de admin.", tags={ "users", })
     @ApiResponses(value = { 
         @ApiResponse(code = 400, message = "Invalid email supplied"),
         @ApiResponse(code = 404, message = "email not found") })
@@ -56,7 +56,7 @@ public interface UsersApi {
     ResponseEntity<List<Users>> getAllUsers();
 
 
-    @ApiOperation(value = "Updated user", nickname = "updateUser", notes = "This can only be done by the admin.", tags={ "user", })
+    @ApiOperation(value = "Updated user", nickname = "updateUser", notes = "This can only be done by the admin.", tags={ "users", })
     @ApiResponses(value = { 
         @ApiResponse(code = 400, message = "Invalid user supplied"),
         @ApiResponse(code = 404, message = "User not found") })

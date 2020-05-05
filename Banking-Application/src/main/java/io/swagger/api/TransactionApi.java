@@ -25,11 +25,11 @@ import javax.validation.Valid;
 import javax.validation.constraints.*;
 import java.util.List;
 import java.util.Map;
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2020-05-05T12:28:13.386Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2020-05-05T12:47:35.450Z[GMT]")
 @Api(value = "transaction", description = "the transaction API")
 public interface TransactionApi {
 
-    @ApiOperation(value = "Adds a transaction with form data", nickname = "addTransaction", notes = "Adds a transaction to the system", tags={ "transaction", })
+    @ApiOperation(value = "Adds a transaction with form data", nickname = "addTransaction", notes = "Adds a transaction to the system", tags={ "transactions", })
     @ApiResponses(value = { 
         @ApiResponse(code = 201, message = "item created"),
         @ApiResponse(code = 400, message = "invalid input, object invalid"),
@@ -46,7 +46,7 @@ public interface TransactionApi {
 );
 
 
-    @ApiOperation(value = "Get all the transactions", nickname = "getAllTransactions", notes = "Returns all transactions", response = Transaction.class, responseContainer = "List", tags={ "transaction", })
+    @ApiOperation(value = "Get all the transactions", nickname = "getAllTransactions", notes = "Returns all transactions", response = Transaction.class, responseContainer = "List", tags={ "transactions", })
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "search results matching criteria", response = Transaction.class, responseContainer = "List"),
         @ApiResponse(code = 400, message = "bad input parameter") })
@@ -56,7 +56,7 @@ public interface TransactionApi {
     ResponseEntity<List<Transaction>> getAllTransactions();
 
 
-    @ApiOperation(value = "Get a transactions by ID", nickname = "getTransactionById", notes = "Returns a single transaction", response = Transaction.class, responseContainer = "List", tags={ "transaction", })
+    @ApiOperation(value = "Get a transactions by ID", nickname = "getTransactionById", notes = "Returns a single transaction", response = Transaction.class, responseContainer = "List", tags={ "transactions", })
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "search results matching criteria", response = Transaction.class, responseContainer = "List"),
         @ApiResponse(code = 400, message = "Bad input parameter"),
