@@ -1,5 +1,6 @@
 package io.swagger.model;
 
+import java.time.LocalDateTime;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -8,6 +9,8 @@ import io.swagger.annotations.ApiModelProperty;
 import java.math.BigDecimal;
 import org.threeten.bp.OffsetDateTime;
 import org.springframework.validation.annotation.Validated;
+
+import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
@@ -16,31 +19,51 @@ import javax.validation.constraints.*;
  */
 @Validated
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2020-05-05T12:47:35.450Z[GMT]")
+@Entity
 public class Transaction   {
+
+  @Id
+  @SequenceGenerator(name = "transaction_seq", initialValue = 1)
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "transaction_seq")
   @JsonProperty("id")
   private Long id = null;
 
   @JsonProperty("from")
-  private Long from = null;
+  @ManyToOne
+  private Account from = null;
 
   @JsonProperty("to")
-  private Long to = null;
+  @ManyToOne
+  private Account to = null;
 
   @JsonProperty("amount")
-  private BigDecimal amount = null;
+  private Long amount = null;
 
   @JsonProperty("by")
-  private Long by = null;
+  @ManyToOne
+  private Users by = null;
 
   @JsonProperty("date")
-  private OffsetDateTime date = null;
+  private LocalDateTime date = null;
 
   public Transaction id(Long id) {
     this.id = id;
     return this;
   }
 
-  /**
+  public Transaction() {
+  }
+
+  public Transaction(Account from, Account to, Long amount, Users by, LocalDateTime date) {
+    this.from = from;
+    this.to = to;
+    this.amount = amount;
+    this.by = by;
+    this.date = date;
+  }
+
+
+    /**
    * Get id
    * @return id
   **/
@@ -55,7 +78,7 @@ public class Transaction   {
     this.id = id;
   }
 
-  public Transaction from(Long from) {
+  public Transaction from(Account from) {
     this.from = from;
     return this;
   }
@@ -67,15 +90,15 @@ public class Transaction   {
   @ApiModelProperty(required = true, value = "AccountId form the account")
       @NotNull
 
-    public Long getFrom() {
+    public Account getFrom() {
     return from;
   }
 
-  public void setFrom(Long from) {
+  public void setFrom(Account from) {
     this.from = from;
   }
 
-  public Transaction to(Long to) {
+  public Transaction to(Account to) {
     this.to = to;
     return this;
   }
@@ -87,15 +110,15 @@ public class Transaction   {
   @ApiModelProperty(required = true, value = "AccountId from the account")
       @NotNull
 
-    public Long getTo() {
+    public Account getTo() {
     return to;
   }
 
-  public void setTo(Long to) {
+  public void setTo(Account to) {
     this.to = to;
   }
 
-  public Transaction amount(BigDecimal amount) {
+  public Transaction amount(Long amount) {
     this.amount = amount;
     return this;
   }
@@ -108,15 +131,15 @@ public class Transaction   {
       @NotNull
 
     @Valid
-    public BigDecimal getAmount() {
+    public Long getAmount() {
     return amount;
   }
 
-  public void setAmount(BigDecimal amount) {
+  public void setAmount(Long amount) {
     this.amount = amount;
   }
 
-  public Transaction by(Long by) {
+  public Transaction by(Users by) {
     this.by = by;
     return this;
   }
@@ -128,15 +151,15 @@ public class Transaction   {
   @ApiModelProperty(required = true, value = "UserId from the user")
       @NotNull
 
-    public Long getBy() {
+    public Users getBy() {
     return by;
   }
 
-  public void setBy(Long by) {
+  public void setBy(Users by) {
     this.by = by;
   }
 
-  public Transaction date(OffsetDateTime date) {
+  public Transaction date(LocalDateTime date) {
     this.date = date;
     return this;
   }
@@ -146,15 +169,16 @@ public class Transaction   {
    * @return date
   **/
   @ApiModelProperty(value = "")
-  
+
     @Valid
-    public OffsetDateTime getDate() {
+    public LocalDateTime getDate() {
     return date;
   }
 
-  public void setDate(OffsetDateTime date) {
+  public void setDate(LocalDateTime date) {
     this.date = date;
   }
+
 
 
   @Override

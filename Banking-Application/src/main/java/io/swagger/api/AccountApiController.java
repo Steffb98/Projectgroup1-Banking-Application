@@ -3,6 +3,7 @@ package io.swagger.api;
 import io.swagger.model.Account;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.*;
+import io.swagger.service.AccountService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -32,10 +33,13 @@ public class AccountApiController implements AccountApi {
 
     private final HttpServletRequest request;
 
+    private AccountService accountService;
+
     @org.springframework.beans.factory.annotation.Autowired
-    public AccountApiController(ObjectMapper objectMapper, HttpServletRequest request) {
+    public AccountApiController(ObjectMapper objectMapper, HttpServletRequest request, AccountService accountService) {
         this.objectMapper = objectMapper;
         this.request = request;
+        this.accountService = accountService;
     }
 
     public ResponseEntity<Void> createAcc(@ApiParam(value = "Account object that needs to be added to the store" ,required=true )  @Valid @RequestBody Account body

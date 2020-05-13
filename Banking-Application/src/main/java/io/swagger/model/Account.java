@@ -8,6 +8,9 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.math.BigDecimal;
 import org.springframework.validation.annotation.Validated;
+
+import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
@@ -16,7 +19,10 @@ import javax.validation.constraints.*;
  */
 @Validated
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2020-05-05T12:47:35.450Z[GMT]")
+@Entity
 public class Account   {
+
+  @Id
   @JsonProperty("iban")
   private String iban = null;
 
@@ -117,6 +123,14 @@ public class Account   {
     this.typeofaccount = typeofaccount;
   }
 
+  public Account() {
+  }
+
+  public Account(String iban, BigDecimal balance, TypeofaccountEnum typeofaccount) {
+    this.iban = iban;
+    this.balance = balance;
+    this.typeofaccount = typeofaccount;
+  }
 
   @Override
   public boolean equals(java.lang.Object o) {

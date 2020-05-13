@@ -7,6 +7,7 @@ package io.swagger.api;
 
 import io.swagger.model.Users;
 import io.swagger.annotations.*;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,15 +26,14 @@ import java.util.List;
 import java.util.Map;
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2020-05-05T12:47:35.450Z[GMT]")
 @Api(value = "users", description = "the users API")
+@RequestMapping(value = "/users")
 public interface UsersApi {
 
     @ApiOperation(value = "Create user", nickname = "createUser", notes = "This can only be done by admin form the bank.", tags={ "users", })
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "successful operation") })
-    @RequestMapping(value = "/users",
-        method = RequestMethod.POST)
-    ResponseEntity<Void> createUser(@ApiParam(value = "Created user object",required=true) @PathVariable("body") Users body
-);
+    @RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    ResponseEntity<Void> createUser(@PathVariable Users user);
 
 
     @ApiOperation(value = "Delete user", nickname = "deleteUser", notes = "This can only be done by de admin.", tags={ "users", })
@@ -50,8 +50,8 @@ public interface UsersApi {
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "search results matching criteria", response = Users.class, responseContainer = "List"),
         @ApiResponse(code = 400, message = "bad input parameter") })
-    @RequestMapping(value = "/users",
-        produces = { "application/json" }, 
+    @RequestMapping(value = "",
+        produces = { "application/json" },
         method = RequestMethod.GET)
     ResponseEntity<List<Users>> getAllUsers();
 

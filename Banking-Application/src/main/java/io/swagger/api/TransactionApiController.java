@@ -1,6 +1,8 @@
 package io.swagger.api;
 
 import java.math.BigDecimal;
+
+import io.swagger.service.TransactionService;
 import org.threeten.bp.OffsetDateTime;
 import io.swagger.model.Transaction;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -34,10 +36,13 @@ public class TransactionApiController implements TransactionApi {
 
     private final HttpServletRequest request;
 
+    private TransactionService transactionService;
+
     @org.springframework.beans.factory.annotation.Autowired
-    public TransactionApiController(ObjectMapper objectMapper, HttpServletRequest request) {
+    public TransactionApiController(ObjectMapper objectMapper, HttpServletRequest request, TransactionService transactionService) {
         this.objectMapper = objectMapper;
         this.request = request;
+        this.transactionService = transactionService;
     }
 
     public ResponseEntity<Void> addTransaction(@ApiParam(value = "") @RequestParam(value="id", required=false)  Long id
