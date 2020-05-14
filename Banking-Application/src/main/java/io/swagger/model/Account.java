@@ -21,8 +21,17 @@ import javax.validation.constraints.*;
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2020-05-05T12:47:35.450Z[GMT]")
 @Entity
 public class Account   {
+<<<<<<< Updated upstream
 
   @Id
+=======
+  public Account(String iban, BigDecimal balance, TypeofaccountEnum typeofaccount) {
+    this.iban = iban;
+    this.balance = balance;
+    this.typeofaccount = typeofaccount;
+  }
+
+>>>>>>> Stashed changes
   @JsonProperty("iban")
   private String iban = null;
 

@@ -21,6 +21,8 @@ import javax.validation.constraints.*;
 import javax.validation.Valid;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2020-05-05T12:47:35.450Z[GMT]")
@@ -56,14 +58,12 @@ public class AccountApiController implements AccountApi {
     }
 
     public ResponseEntity<List<Account>> listAccounts() {
+        Account account = new Account("abc", new BigDecimal("10.00"), Account.TypeofaccountEnum.SAVING);
+        Account account2 = new Account("abc2", new BigDecimal("11.00"), Account.TypeofaccountEnum.DEPOSIT);
+        List<Account> list = Arrays.asList(account, account2);
         String accept = request.getHeader("Accept");
         if (accept != null && accept.contains("application/json")) {
-            try {
-                return new ResponseEntity<List<Account>>(objectMapper.readValue("[ {\n  \"balance\" : 10.00,\n  \"iban\" : \"NL00RABO0123456789\",\n  \"typeofaccount\" : \"saving\"\n}, {\n  \"balance\" : 10.00,\n  \"iban\" : \"NL00RABO0123456789\",\n  \"typeofaccount\" : \"saving\"\n} ]", List.class), HttpStatus.NOT_IMPLEMENTED);
-            } catch (IOException e) {
-                log.error("Couldn't serialize response for content type application/json", e);
-                return new ResponseEntity<List<Account>>(HttpStatus.INTERNAL_SERVER_ERROR);
-            }
+            return ResponseEntity.status(200).body(list);
         }
 
         return new ResponseEntity<List<Account>>(HttpStatus.NOT_IMPLEMENTED);
