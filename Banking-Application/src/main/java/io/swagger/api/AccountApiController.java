@@ -58,12 +58,9 @@ public class AccountApiController implements AccountApi {
     }
 
     public ResponseEntity<List<Account>> listAccounts() {
-        Account account = new Account("abc", new BigDecimal("10.00"), Account.TypeofaccountEnum.SAVING);
-        Account account2 = new Account("abc2", new BigDecimal("11.00"), Account.TypeofaccountEnum.DEPOSIT);
-        List<Account> list = Arrays.asList(account, account2);
         String accept = request.getHeader("Accept");
         if (accept != null && accept.contains("application/json")) {
-            return ResponseEntity.status(200).body(list);
+            return ResponseEntity.status(200).body(accountService.getAllAccounts());
         }
 
         return new ResponseEntity<List<Account>>(HttpStatus.NOT_IMPLEMENTED);
