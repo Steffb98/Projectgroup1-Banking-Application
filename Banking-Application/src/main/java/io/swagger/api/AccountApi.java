@@ -7,7 +7,6 @@ package io.swagger.api;
 
 import io.swagger.model.Account;
 import io.swagger.annotations.*;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,7 +23,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.*;
 import java.util.List;
 import java.util.Map;
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2020-05-05T12:47:35.450Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2020-05-21T13:09:59.263Z[GMT]")
 @Api(value = "account", description = "the account API")
 public interface AccountApi {
 
@@ -32,20 +31,9 @@ public interface AccountApi {
     @ApiResponses(value = { 
         @ApiResponse(code = 405, message = "Invalid input") })
     @RequestMapping(value = "/account",
-        consumes = { MediaType.APPLICATION_JSON_VALUE },
+        consumes = { "application/json", "application/xml" },
         method = RequestMethod.POST)
     ResponseEntity<Void> createAcc(@ApiParam(value = "Account object that needs to be added to the store" ,required=true )  @Valid @RequestBody Account body
-);
-
-
-    @ApiOperation(value = "Deletes an account", nickname = "deleteAcc", notes = "", tags={ "accounts", })
-    @ApiResponses(value = { 
-        @ApiResponse(code = 400, message = "Invalid ID supplied"),
-        @ApiResponse(code = 404, message = "Account not found") })
-    @RequestMapping(value = "/account",
-        method = RequestMethod.DELETE)
-    ResponseEntity<Void> deleteAcc(@ApiParam(value = "User id to delete",required=true) @PathVariable("userId") Long userId
-,@ApiParam(value = "" ) @RequestHeader(value="api_key", required=false) String apiKey
 );
 
 
@@ -54,7 +42,7 @@ public interface AccountApi {
         @ApiResponse(code = 200, message = "search results matching criteria", response = Account.class, responseContainer = "List"),
         @ApiResponse(code = 400, message = "bad input parameter"),
         @ApiResponse(code = 403, message = "forbidden") })
-    @RequestMapping(value = "/account/listallaccounts",
+    @RequestMapping(value = "/account/listaccounts",
         produces = { "application/json" }, 
         method = RequestMethod.GET)
     ResponseEntity<List<Account>> listAccounts();
@@ -68,7 +56,17 @@ public interface AccountApi {
         produces = { "application/json" }, 
         method = RequestMethod.GET)
     ResponseEntity<List<Account>> listSpecificAccount(@NotNull @ApiParam(value = "ID of user", required = true) @Valid @RequestParam(value = "userId", required = true) Long userId
-,@ApiParam(value = "Id of account",required=true) @PathVariable("accountId") Long accountId
+,@ApiParam(value = "Id of account",required=true) @PathVariable("accountId") String accountId
+);
+
+
+    @ApiOperation(value = "Changes account to inactive/active", nickname = "toggleStatusAcc", notes = "", tags={ "accounts", })
+    @ApiResponses(value = { 
+        @ApiResponse(code = 400, message = "Invalid ID supplied"),
+        @ApiResponse(code = 404, message = "Account not found") })
+    @RequestMapping(value = "/account/{accountId}",
+        method = RequestMethod.PUT)
+    ResponseEntity<Void> toggleStatusAcc(@ApiParam(value = "AccountID to set to active or inactive",required=true) @PathVariable("accountId") String accountId
 );
 
 }

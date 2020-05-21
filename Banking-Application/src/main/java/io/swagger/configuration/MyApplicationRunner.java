@@ -30,8 +30,8 @@ public class MyApplicationRunner implements ApplicationRunner {
     public void run(ApplicationArguments applicationArguments) throws Exception {
 
         List<Users> users = Arrays.asList(
-                new Users("Hayo", "Bos", "663143@student.inholland.nl", "wachtwoord"),
-                new Users("Bobby", "McBobface", "bobbyface@gmail.com", "Sterk")
+                new Users("Hayo", "Bos", "663143@student.inholland.nl", "wachtwoord", true),
+                new Users("Bobby", "McBobface", "bobbyface@gmail.com", "Sterk", true)
         );
 
         Account account = new Account(Account.TypeofaccountEnum.SAVING, 1);

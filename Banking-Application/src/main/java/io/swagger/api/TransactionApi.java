@@ -5,8 +5,6 @@
  */
 package io.swagger.api;
 
-import java.math.BigDecimal;
-import org.threeten.bp.OffsetDateTime;
 import io.swagger.model.Transaction;
 import io.swagger.annotations.*;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +23,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.*;
 import java.util.List;
 import java.util.Map;
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2020-05-05T12:47:35.450Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2020-05-21T13:09:59.263Z[GMT]")
 @Api(value = "transaction", description = "the transaction API")
 public interface TransactionApi {
 
@@ -35,14 +33,9 @@ public interface TransactionApi {
         @ApiResponse(code = 400, message = "invalid input, object invalid"),
         @ApiResponse(code = 409, message = "an existing item already exists") })
     @RequestMapping(value = "/transaction",
-        consumes = { "application/x-www-form-urlencoded" },
+        consumes = { "application/json", "application/xml" },
         method = RequestMethod.POST)
-    ResponseEntity<Void> addTransaction(@ApiParam(value = "") @RequestParam(value="id", required=false)  Long id
-,@ApiParam(value = "") @RequestParam(value="from", required=false)  Long from
-,@ApiParam(value = "") @RequestParam(value="to", required=false)  Long to
-,@ApiParam(value = "") @RequestParam(value="amount", required=false)  BigDecimal amount
-,@ApiParam(value = "") @RequestParam(value="by", required=false)  Long by
-,@ApiParam(value = "") @RequestParam(value="date", required=false)  OffsetDateTime date
+    ResponseEntity<Void> addTransaction(@ApiParam(value = "Transaction object that needs to be added to the store" ,required=true )  @Valid @RequestBody Transaction body
 );
 
 
@@ -65,6 +58,18 @@ public interface TransactionApi {
         produces = { "application/json" }, 
         method = RequestMethod.GET)
     ResponseEntity<List<Transaction>> getTransactionById(@ApiParam(value = "ID of transaction to return",required=true) @PathVariable("transactionId") Long transactionId
+);
+
+
+    @ApiOperation(value = "Get transactions from an user", nickname = "getTransactionFromUser", notes = "Returns transaction from a specific user", response = Transaction.class, responseContainer = "List", tags={ "transactions", })
+    @ApiResponses(value = { 
+        @ApiResponse(code = 200, message = "search results matching criteria", response = Transaction.class, responseContainer = "List"),
+        @ApiResponse(code = 400, message = "Bad input parameter"),
+        @ApiResponse(code = 404, message = "User not found") })
+    @RequestMapping(value = "/transaction/{userId}",
+        produces = { "application/json" }, 
+        method = RequestMethod.GET)
+    ResponseEntity<List<Transaction>> getTransactionFromUser(@ApiParam(value = "ID of a user",required=true) @PathVariable("userId") Long userId
 );
 
 }

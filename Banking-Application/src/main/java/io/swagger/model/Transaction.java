@@ -1,6 +1,5 @@
 package io.swagger.model;
 
-import java.time.LocalDateTime;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -9,8 +8,6 @@ import io.swagger.annotations.ApiModelProperty;
 import java.math.BigDecimal;
 import org.threeten.bp.OffsetDateTime;
 import org.springframework.validation.annotation.Validated;
-
-import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
@@ -18,52 +15,32 @@ import javax.validation.constraints.*;
  * Transaction
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2020-05-05T12:47:35.450Z[GMT]")
-@Entity
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2020-05-21T13:09:59.263Z[GMT]")
 public class Transaction   {
-
-  @Id
-  @SequenceGenerator(name = "transaction_seq", initialValue = 1)
-  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "transaction_seq")
   @JsonProperty("id")
   private Long id = null;
 
-  @JsonProperty("from")
-  @ManyToOne
-  private Account from = null;
+  @JsonProperty("sender")
+  private String sender = null;
 
-  @JsonProperty("to")
-  @ManyToOne
-  private Account to = null;
+  @JsonProperty("receiver")
+  private String receiver = null;
 
   @JsonProperty("amount")
-  private Long amount = null;
+  private BigDecimal amount = null;
 
   @JsonProperty("by")
-  @ManyToOne
-  private Users by = null;
+  private Long by = null;
 
   @JsonProperty("date")
-  private LocalDateTime date = null;
+  private OffsetDateTime date = null;
 
   public Transaction id(Long id) {
     this.id = id;
     return this;
   }
 
-  public Transaction() {
-  }
-
-  public Transaction(Account from, Account to, Long amount, Users by, LocalDateTime date) {
-    this.from = from;
-    this.to = to;
-    this.amount = amount;
-    this.by = by;
-    this.date = date;
-  }
-
-
-    /**
+  /**
    * Get id
    * @return id
   **/
@@ -78,47 +55,47 @@ public class Transaction   {
     this.id = id;
   }
 
-  public Transaction from(Account from) {
-    this.from = from;
+  public Transaction sender(String sender) {
+    this.sender = sender;
     return this;
   }
 
   /**
-   * AccountId form the account
-   * @return from
+   * iban form the sender account
+   * @return sender
   **/
-  @ApiModelProperty(required = true, value = "AccountId form the account")
+  @ApiModelProperty(required = true, value = "iban form the sender account")
       @NotNull
 
-    public Account getFrom() {
-    return from;
+    public String getSender() {
+    return sender;
   }
 
-  public void setFrom(Account from) {
-    this.from = from;
+  public void setSender(String sender) {
+    this.sender = sender;
   }
 
-  public Transaction to(Account to) {
-    this.to = to;
+  public Transaction receiver(String receiver) {
+    this.receiver = receiver;
     return this;
   }
 
   /**
-   * AccountId from the account
-   * @return to
+   * iban from the receiver account
+   * @return receiver
   **/
-  @ApiModelProperty(required = true, value = "AccountId from the account")
+  @ApiModelProperty(required = true, value = "iban from the receiver account")
       @NotNull
 
-    public Account getTo() {
-    return to;
+    public String getReceiver() {
+    return receiver;
   }
 
-  public void setTo(Account to) {
-    this.to = to;
+  public void setReceiver(String receiver) {
+    this.receiver = receiver;
   }
 
-  public Transaction amount(Long amount) {
+  public Transaction amount(BigDecimal amount) {
     this.amount = amount;
     return this;
   }
@@ -131,15 +108,15 @@ public class Transaction   {
       @NotNull
 
     @Valid
-    public Long getAmount() {
+    public BigDecimal getAmount() {
     return amount;
   }
 
-  public void setAmount(Long amount) {
+  public void setAmount(BigDecimal amount) {
     this.amount = amount;
   }
 
-  public Transaction by(Users by) {
+  public Transaction by(Long by) {
     this.by = by;
     return this;
   }
@@ -151,15 +128,15 @@ public class Transaction   {
   @ApiModelProperty(required = true, value = "UserId from the user")
       @NotNull
 
-    public Users getBy() {
+    public Long getBy() {
     return by;
   }
 
-  public void setBy(Users by) {
+  public void setBy(Long by) {
     this.by = by;
   }
 
-  public Transaction date(LocalDateTime date) {
+  public Transaction date(OffsetDateTime date) {
     this.date = date;
     return this;
   }
@@ -169,16 +146,15 @@ public class Transaction   {
    * @return date
   **/
   @ApiModelProperty(value = "")
-
+  
     @Valid
-    public LocalDateTime getDate() {
+    public OffsetDateTime getDate() {
     return date;
   }
 
-  public void setDate(LocalDateTime date) {
+  public void setDate(OffsetDateTime date) {
     this.date = date;
   }
-
 
 
   @Override
@@ -191,8 +167,8 @@ public class Transaction   {
     }
     Transaction transaction = (Transaction) o;
     return Objects.equals(this.id, transaction.id) &&
-        Objects.equals(this.from, transaction.from) &&
-        Objects.equals(this.to, transaction.to) &&
+        Objects.equals(this.sender, transaction.sender) &&
+        Objects.equals(this.receiver, transaction.receiver) &&
         Objects.equals(this.amount, transaction.amount) &&
         Objects.equals(this.by, transaction.by) &&
         Objects.equals(this.date, transaction.date);
@@ -200,7 +176,7 @@ public class Transaction   {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, from, to, amount, by, date);
+    return Objects.hash(id, sender, receiver, amount, by, date);
   }
 
   @Override
@@ -209,8 +185,8 @@ public class Transaction   {
     sb.append("class Transaction {\n");
     
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
-    sb.append("    from: ").append(toIndentedString(from)).append("\n");
-    sb.append("    to: ").append(toIndentedString(to)).append("\n");
+    sb.append("    sender: ").append(toIndentedString(sender)).append("\n");
+    sb.append("    receiver: ").append(toIndentedString(receiver)).append("\n");
     sb.append("    amount: ").append(toIndentedString(amount)).append("\n");
     sb.append("    by: ").append(toIndentedString(by)).append("\n");
     sb.append("    date: ").append(toIndentedString(date)).append("\n");

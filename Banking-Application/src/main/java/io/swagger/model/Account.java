@@ -7,13 +7,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.math.BigDecimal;
-import java.util.Random;
-
-import io.swagger.dao.AccountRepository;
 import org.springframework.validation.annotation.Validated;
-
-import javax.persistence.Entity;
-import javax.persistence.Id;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
@@ -21,26 +15,13 @@ import javax.validation.constraints.*;
  * Account
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2020-05-05T12:47:35.450Z[GMT]")
-@Entity
-  public class Account   {
-
-  public Account(TypeofaccountEnum typeofaccount, Integer userid) {
-    this.iban = GenerateIBAN();
-    this.balance = new BigDecimal(0.00);
-    this.typeofaccount = typeofaccount;
-    this.userid = userid;
-  }
-
-  @Id
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2020-05-21T13:09:59.263Z[GMT]")
+public class Account   {
   @JsonProperty("iban")
   private String iban = null;
 
   @JsonProperty("balance")
   private BigDecimal balance = null;
-
-  @JsonProperty("userid")
-  private Integer userid = null;
 
   /**
    * Gets or Sets typeofaccount
@@ -74,6 +55,15 @@ import javax.validation.constraints.*;
   }
   @JsonProperty("typeofaccount")
   private TypeofaccountEnum typeofaccount = null;
+
+  @JsonProperty("minimumbalance")
+  private BigDecimal minimumbalance = null;
+
+  @JsonProperty("isactive")
+  private Boolean isactive = null;
+
+  @JsonProperty("userid")
+  private Integer userid = null;
 
   public Account iban(String iban) {
     this.iban = iban;
@@ -116,27 +106,6 @@ import javax.validation.constraints.*;
     this.balance = balance;
   }
 
-  public Account userid(Integer userid) {
-    this.userid = userid;
-    return this;
-  }
-
-  /**
-   * Get userid
-   * @return userid
-   **/
-  @ApiModelProperty(example = "10.00", required = true, value = "")
-  @NotNull
-
-  @Valid
-  public Integer getUserid() {
-    return userid;
-  }
-
-  public void setUserid(Integer userid) {
-    this.userid = userid;
-  }
-
   public Account typeofaccount(TypeofaccountEnum typeofaccount) {
     this.typeofaccount = typeofaccount;
     return this;
@@ -157,8 +126,67 @@ import javax.validation.constraints.*;
     this.typeofaccount = typeofaccount;
   }
 
-  public Account() {
+  public Account minimumbalance(BigDecimal minimumbalance) {
+    this.minimumbalance = minimumbalance;
+    return this;
   }
+
+  /**
+   * Get minimumbalance
+   * @return minimumbalance
+  **/
+  @ApiModelProperty(example = "-10.00", required = true, value = "")
+      @NotNull
+
+    @Valid
+    public BigDecimal getMinimumbalance() {
+    return minimumbalance;
+  }
+
+  public void setMinimumbalance(BigDecimal minimumbalance) {
+    this.minimumbalance = minimumbalance;
+  }
+
+  public Account isactive(Boolean isactive) {
+    this.isactive = isactive;
+    return this;
+  }
+
+  /**
+   * Get isactive
+   * @return isactive
+  **/
+  @ApiModelProperty(example = "true", required = true, value = "")
+      @NotNull
+
+    public Boolean isIsactive() {
+    return isactive;
+  }
+
+  public void setIsactive(Boolean isactive) {
+    this.isactive = isactive;
+  }
+
+  public Account userId(Integer userid) {
+    this.userid = userid;
+    return this;
+  }
+
+  /**
+   * Get isactive
+   * @return isactive
+   **/
+  @ApiModelProperty(example = "true", required = true, value = "")
+  @NotNull
+
+  public Integer userId() {
+    return userid;
+  }
+
+  public void setUserid(Integer userid) {
+    this.userid = userid;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -171,12 +199,14 @@ import javax.validation.constraints.*;
     Account account = (Account) o;
     return Objects.equals(this.iban, account.iban) &&
         Objects.equals(this.balance, account.balance) &&
-        Objects.equals(this.typeofaccount, account.typeofaccount);
+        Objects.equals(this.typeofaccount, account.typeofaccount) &&
+        Objects.equals(this.minimumbalance, account.minimumbalance) &&
+        Objects.equals(this.isactive, account.isactive);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(iban, balance, typeofaccount);
+    return Objects.hash(iban, balance, typeofaccount, minimumbalance, isactive);
   }
 
   @Override
@@ -185,9 +215,10 @@ import javax.validation.constraints.*;
     sb.append("class Account {\n");
     
     sb.append("    iban: ").append(toIndentedString(iban)).append("\n");
-    sb.append("    userid: ").append(toIndentedString(userid)).append("\n");
     sb.append("    balance: ").append(toIndentedString(balance)).append("\n");
     sb.append("    typeofaccount: ").append(toIndentedString(typeofaccount)).append("\n");
+    sb.append("    minimumbalance: ").append(toIndentedString(minimumbalance)).append("\n");
+    sb.append("    isactive: ").append(toIndentedString(isactive)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -201,24 +232,5 @@ import javax.validation.constraints.*;
       return "null";
     }
     return o.toString().replace("\n", "\n    ");
-  }
-
-  public String GenerateIBAN(){
-    Random rand = new Random();
-    String IBAN = "NL";
-    for (int i = 0; i < 2; i++) {
-      int n = rand.nextInt(10) + 0;
-      IBAN += Integer.toString(n);
-    }
-    IBAN += " BLUE";
-    for (int i = 0; i < 13; i++) {
-      if (i % 5 == 0) {
-        IBAN += " ";
-      } else {
-        int n = rand.nextInt(10) + 0;
-        IBAN += Integer.toString(n);
-      }
-    }
-    return IBAN;
   }
 }
