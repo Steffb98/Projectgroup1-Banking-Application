@@ -71,9 +71,9 @@ public class Account   {
   private Boolean isactive = null;
 
   @JsonProperty("userid")
-  private Integer userid = null;
+  private Long userid = null;
 
-  public Account(TypeofaccountEnum typeofaccount, BigDecimal minimumbalance, Boolean isactive, Integer userid) {
+  public Account(TypeofaccountEnum typeofaccount, BigDecimal minimumbalance, Boolean isactive, Long userid) {
     this.iban = GenerateIBAN();
     this.balance = new BigDecimal(0.00);
     this.typeofaccount = typeofaccount;
@@ -187,7 +187,7 @@ public class Account   {
     this.isactive = isactive;
   }
 
-  public Account userId(Integer userid) {
+  public Account userId(Long userid) {
     this.userid = userid;
     return this;
   }
@@ -199,11 +199,11 @@ public class Account   {
   @ApiModelProperty(example = "true", required = true, value = "")
   @NotNull
 
-  public Integer userId() {
+  public Long userId() {
     return userid;
   }
 
-  public void setUserid(Integer userid) {
+  public void setUserid(Long userid) {
     this.userid = userid;
   }
 

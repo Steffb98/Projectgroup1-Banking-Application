@@ -36,28 +36,17 @@ public interface AccountApi {
     ResponseEntity<Void> createAcc(@ApiParam(value = "Account object that needs to be added to the store" ,required=true )  @Valid @RequestBody Account body
 );
 
-
-    @ApiOperation(value = "get all accounts", nickname = "listAccounts", notes = "Calling this method will get you a list of all the accounts", response = Account.class, responseContainer = "List", tags={ "accounts", })
-    @ApiResponses(value = { 
-        @ApiResponse(code = 200, message = "search results matching criteria", response = Account.class, responseContainer = "List"),
-        @ApiResponse(code = 400, message = "bad input parameter"),
-        @ApiResponse(code = 403, message = "forbidden") })
-    @RequestMapping(value = "/account/listaccounts",
-        produces = { "application/json" }, 
-        method = RequestMethod.GET)
-    ResponseEntity<List<Account>> listAccounts();
-
-
-    @ApiOperation(value = "Get a specific account", nickname = "listSpecificAccount", notes = "Calling this method will get you a specific bank account from a user", response = Account.class, responseContainer = "List", tags={ "accounts", })
-    @ApiResponses(value = { 
-        @ApiResponse(code = 200, message = "search results matching criteria", response = Account.class, responseContainer = "List"),
-        @ApiResponse(code = 400, message = "bad input parameter") })
-    @RequestMapping(value = "/account/{accountId}",
-        produces = { "application/json" }, 
-        method = RequestMethod.GET)
-    ResponseEntity<List<Account>> listSpecificAccount(@NotNull @ApiParam(value = "ID of user", required = true) @Valid @RequestParam(value = "userId", required = true) Long userId
-,@ApiParam(value = "Id of account",required=true) @PathVariable("accountId") String accountId
-);
+    @ApiOperation(value = "get account by userid", nickname = "getAccountByUserID", notes = "Calling this method will retrieve accounts based on the userID", response = Account.class, responseContainer = "List", tags={ "accounts", })
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "search results matching criteria", response = Account.class, responseContainer = "List"),
+            @ApiResponse(code = 400, message = "bad input parameter"),
+            @ApiResponse(code = 403, message = "forbidden"),
+            @ApiResponse(code = 404, message = "accounts not found") })
+    @RequestMapping(value = "/account/listaccount",
+            produces = { "application/json" },
+            method = RequestMethod.GET)
+    ResponseEntity<List<Account>> getAccountByUserID(@NotNull @ApiParam(value = "Account of user to show", required = true) @Valid @RequestParam(value = "userId", required = true) Long userId
+    );
 
 
     @ApiOperation(value = "Changes account to inactive/active", nickname = "toggleStatusAcc", notes = "", tags={ "accounts", })

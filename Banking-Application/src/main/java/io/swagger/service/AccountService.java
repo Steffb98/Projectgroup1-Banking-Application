@@ -24,8 +24,8 @@ public class AccountService {
         accountRepository.save(account);
     }
 
-    public List<Account> getAllAccounts() {
-        return (List<Account>) accountRepository.findAll();
+    public List<Account> getAccountsByUserId(Long userId) {
+        return null;
     }
 
     private boolean CheckIBAN(String iban){
