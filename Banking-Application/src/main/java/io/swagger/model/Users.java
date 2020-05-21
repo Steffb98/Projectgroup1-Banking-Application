@@ -5,7 +5,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import jdk.jfr.Enabled;
 import org.springframework.validation.annotation.Validated;
+
+import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
@@ -14,9 +17,14 @@ import javax.validation.constraints.*;
  */
 @Validated
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2020-05-21T13:09:59.263Z[GMT]")
-public class Users   {
+@Entity
+public class Users {
+
+  @Id
+  @SequenceGenerator(name = "user_seq", initialValue = 1)
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_seq")
   @JsonProperty("id")
-  private Integer id = null;
+  private Long id = null;
 
   @JsonProperty("firstname")
   private String firstname = null;
@@ -33,7 +41,18 @@ public class Users   {
   @JsonProperty("isactive")
   private Boolean isactive = null;
 
-  public Users id(Integer id) {
+  public Users(String firstname, String lastname, String email, String password, Boolean isactive) {
+    this.firstname = firstname;
+    this.lastname = lastname;
+    this.email = email;
+    this.password = password;
+    this.isactive = isactive;
+  }
+
+  public Users() {
+  }
+
+  public Users id(Long id) {
     this.id = id;
     return this;
   }
@@ -45,11 +64,11 @@ public class Users   {
   @ApiModelProperty(required = true, value = "")
       @NotNull
 
-    public Integer getId() {
+    public Long getId() {
     return id;
   }
 
-  public void setId(Integer id) {
+  public void setId(Long id) {
     this.id = id;
   }
 

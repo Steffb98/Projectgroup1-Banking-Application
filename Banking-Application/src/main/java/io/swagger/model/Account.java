@@ -7,7 +7,12 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.math.BigDecimal;
+import java.util.Random;
+
 import org.springframework.validation.annotation.Validated;
+
+import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
@@ -16,7 +21,10 @@ import javax.validation.constraints.*;
  */
 @Validated
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2020-05-21T13:09:59.263Z[GMT]")
+@Entity
 public class Account   {
+
+  @Id
   @JsonProperty("iban")
   private String iban = null;
 
@@ -64,6 +72,18 @@ public class Account   {
 
   @JsonProperty("userid")
   private Integer userid = null;
+
+  public Account(TypeofaccountEnum typeofaccount, BigDecimal minimumbalance, Boolean isactive, Integer userid) {
+    this.iban = GenerateIBAN();
+    this.balance = new BigDecimal(0.00);
+    this.typeofaccount = typeofaccount;
+    this.minimumbalance = minimumbalance;
+    this.isactive = isactive;
+    this.userid = userid;
+  }
+
+  public Account() {
+  }
 
   public Account iban(String iban) {
     this.iban = iban;
@@ -215,6 +235,7 @@ public class Account   {
     sb.append("class Account {\n");
     
     sb.append("    iban: ").append(toIndentedString(iban)).append("\n");
+    sb.append("    userid: ").append(toIndentedString(userid)).append("\n");
     sb.append("    balance: ").append(toIndentedString(balance)).append("\n");
     sb.append("    typeofaccount: ").append(toIndentedString(typeofaccount)).append("\n");
     sb.append("    minimumbalance: ").append(toIndentedString(minimumbalance)).append("\n");
@@ -232,5 +253,25 @@ public class Account   {
       return "null";
     }
     return o.toString().replace("\n", "\n    ");
+  }
+
+
+  public String GenerateIBAN(){
+    Random rand = new Random();
+    String IBAN = "NL";
+    for (int i = 0; i < 2; i++) {
+      int n = rand.nextInt(10) + 0;
+      IBAN += Integer.toString(n);
+    }
+    IBAN += " BLUE";
+    for (int i = 0; i < 13; i++) {
+      if (i % 5 == 0) {
+        IBAN += " ";
+      } else {
+        int n = rand.nextInt(10) + 0;
+        IBAN += Integer.toString(n);
+      }
+    }
+    return IBAN;
   }
 }

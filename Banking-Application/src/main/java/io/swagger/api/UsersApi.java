@@ -7,6 +7,7 @@ package io.swagger.api;
 
 import io.swagger.model.Users;
 import io.swagger.annotations.*;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,7 +32,7 @@ public interface UsersApi {
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "successful operation") })
     @RequestMapping(value = "/users",
-        method = RequestMethod.POST)
+        method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<Void> createUser(@ApiParam(value = "Created user object",required=true) @PathVariable("body") Users body
 );
 

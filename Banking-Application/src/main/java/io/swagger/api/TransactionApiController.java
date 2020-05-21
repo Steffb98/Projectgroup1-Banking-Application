@@ -3,6 +3,7 @@ package io.swagger.api;
 import io.swagger.model.Transaction;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.*;
+import io.swagger.service.TransactionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -32,10 +33,13 @@ public class TransactionApiController implements TransactionApi {
 
     private final HttpServletRequest request;
 
+    private TransactionService transactionService;
+
     @org.springframework.beans.factory.annotation.Autowired
-    public TransactionApiController(ObjectMapper objectMapper, HttpServletRequest request) {
+    public TransactionApiController(ObjectMapper objectMapper, HttpServletRequest request, TransactionService transactionService) {
         this.objectMapper = objectMapper;
         this.request = request;
+        this.transactionService = transactionService;
     }
 
     public ResponseEntity<Void> addTransaction(@ApiParam(value = "Transaction object that needs to be added to the store" ,required=true )  @Valid @RequestBody Transaction body

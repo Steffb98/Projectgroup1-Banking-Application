@@ -3,6 +3,7 @@ package io.swagger.api;
 import io.swagger.model.Users;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.*;
+import io.swagger.service.UsersService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -32,30 +33,33 @@ public class UsersApiController implements UsersApi {
 
     private final HttpServletRequest request;
 
+    private UsersService usersService;
+
     @org.springframework.beans.factory.annotation.Autowired
-    public UsersApiController(ObjectMapper objectMapper, HttpServletRequest request) {
+    public UsersApiController(ObjectMapper objectMapper, HttpServletRequest request, UsersService usersService) {
         this.objectMapper = objectMapper;
         this.request = request;
+        this.usersService = usersService;
     }
 
-    public ResponseEntity<Void> createUser(@ApiParam(value = "Created user object",required=true) @PathVariable("body") Users body
+    public ResponseEntity createUser(@ApiParam(value = "Created user object",required=true) @PathVariable("body") Users body
 ) {
         String accept = request.getHeader("Accept");
-        return new ResponseEntity<Void>(HttpStatus.NOT_IMPLEMENTED);
+        try {
+            usersService.addUser(body);
+            return ResponseEntity.status(HttpStatus.OK).body(body);
+        } catch (IllegalArgumentException iae) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
 
     public ResponseEntity<List<Users>> getAllUsers() {
         String accept = request.getHeader("Accept");
         if (accept != null && accept.contains("application/json")) {
-            try {
-                return new ResponseEntity<List<Users>>(objectMapper.readValue("[ {\n  \"firstname\" : \"firstname\",\n  \"password\" : \"password\",\n  \"isactive\" : true,\n  \"id\" : 0,\n  \"email\" : \"inholland@student.nl\",\n  \"lastname\" : \"lastname\"\n}, {\n  \"firstname\" : \"firstname\",\n  \"password\" : \"password\",\n  \"isactive\" : true,\n  \"id\" : 0,\n  \"email\" : \"inholland@student.nl\",\n  \"lastname\" : \"lastname\"\n} ]", List.class), HttpStatus.NOT_IMPLEMENTED);
-            } catch (IOException e) {
-                log.error("Couldn't serialize response for content type application/json", e);
-                return new ResponseEntity<List<Users>>(HttpStatus.INTERNAL_SERVER_ERROR);
-            }
+            return ResponseEntity.status(200).body(usersService.getAllUsers());
         }
 
-        return new ResponseEntity<List<Users>>(HttpStatus.NOT_IMPLEMENTED);
+        return  ResponseEntity.status(200).body(usersService.getAllUsers());
     }
 
     public ResponseEntity<Void> toggleUserStatus(@ApiParam(value = "The userID that needs to be set active or inactive",required=true) @PathVariable("id") Long id
