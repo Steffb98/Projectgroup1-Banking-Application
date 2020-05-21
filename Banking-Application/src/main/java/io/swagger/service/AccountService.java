@@ -15,7 +15,25 @@ public class AccountService {
         this.accountRepository = accountRepository;
     }
 
+    public void CreateAccount(Account account) {
+        boolean duplicate = true;
+        while (duplicate == true) {
+            account.GenerateIBAN();
+            duplicate = CheckIBAN(account.getIban());
+        }
+        accountRepository.save(account);
+    }
+
     public List<Account> getAllAccounts() {
         return (List<Account>) accountRepository.findAll();
+    }
+
+    private boolean CheckIBAN(String iban){
+        try{
+            accountRepository.findOne(iban);
+            return false;
+        }catch(Exception io){
+            return true;
+        }
     }
 }

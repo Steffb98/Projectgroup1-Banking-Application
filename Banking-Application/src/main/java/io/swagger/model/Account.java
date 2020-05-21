@@ -7,6 +7,9 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.math.BigDecimal;
+import java.util.Random;
+
+import io.swagger.dao.AccountRepository;
 import org.springframework.validation.annotation.Validated;
 
 import javax.persistence.Entity;
@@ -20,12 +23,13 @@ import javax.validation.constraints.*;
 @Validated
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2020-05-05T12:47:35.450Z[GMT]")
 @Entity
-public class Account   {
+  public class Account   {
 
-  public Account(String iban, BigDecimal balance, TypeofaccountEnum typeofaccount) {
-    this.iban = iban;
-    this.balance = balance;
+  public Account(TypeofaccountEnum typeofaccount, Integer userid) {
+    this.iban = GenerateIBAN();
+    this.balance = new BigDecimal(0.00);
     this.typeofaccount = typeofaccount;
+    this.userid = userid;
   }
 
   @Id
@@ -34,6 +38,9 @@ public class Account   {
 
   @JsonProperty("balance")
   private BigDecimal balance = null;
+
+  @JsonProperty("userid")
+  private Integer userid = null;
 
   /**
    * Gets or Sets typeofaccount
@@ -109,6 +116,27 @@ public class Account   {
     this.balance = balance;
   }
 
+  public Account userid(Integer userid) {
+    this.userid = userid;
+    return this;
+  }
+
+  /**
+   * Get userid
+   * @return userid
+   **/
+  @ApiModelProperty(example = "10.00", required = true, value = "")
+  @NotNull
+
+  @Valid
+  public Integer getUserid() {
+    return userid;
+  }
+
+  public void setUserid(Integer userid) {
+    this.userid = userid;
+  }
+
   public Account typeofaccount(TypeofaccountEnum typeofaccount) {
     this.typeofaccount = typeofaccount;
     return this;
@@ -157,6 +185,7 @@ public class Account   {
     sb.append("class Account {\n");
     
     sb.append("    iban: ").append(toIndentedString(iban)).append("\n");
+    sb.append("    userid: ").append(toIndentedString(userid)).append("\n");
     sb.append("    balance: ").append(toIndentedString(balance)).append("\n");
     sb.append("    typeofaccount: ").append(toIndentedString(typeofaccount)).append("\n");
     sb.append("}");
@@ -172,5 +201,24 @@ public class Account   {
       return "null";
     }
     return o.toString().replace("\n", "\n    ");
+  }
+
+  public String GenerateIBAN(){
+    Random rand = new Random();
+    String IBAN = "NL";
+    for (int i = 0; i < 2; i++) {
+      int n = rand.nextInt(10) + 0;
+      IBAN += Integer.toString(n);
+    }
+    IBAN += " BLUE";
+    for (int i = 0; i < 13; i++) {
+      if (i % 5 == 0) {
+        IBAN += " ";
+      } else {
+        int n = rand.nextInt(10) + 0;
+        IBAN += Integer.toString(n);
+      }
+    }
+    return IBAN;
   }
 }

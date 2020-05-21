@@ -7,6 +7,7 @@ package io.swagger.api;
 
 import io.swagger.model.Account;
 import io.swagger.annotations.*;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,7 +32,7 @@ public interface AccountApi {
     @ApiResponses(value = { 
         @ApiResponse(code = 405, message = "Invalid input") })
     @RequestMapping(value = "/account",
-        consumes = { "application/json", "application/xml" },
+        consumes = { MediaType.APPLICATION_JSON_VALUE },
         method = RequestMethod.POST)
     ResponseEntity<Void> createAcc(@ApiParam(value = "Account object that needs to be added to the store" ,required=true )  @Valid @RequestBody Account body
 );
