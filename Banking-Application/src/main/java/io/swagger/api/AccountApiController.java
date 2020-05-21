@@ -44,10 +44,15 @@ public class AccountApiController implements AccountApi {
         this.accountService = accountService;
     }
 
-    public ResponseEntity<Void> createAcc(@ApiParam(value = "Account object that needs to be added to the store" ,required=true )  @Valid @RequestBody Account body
+    public ResponseEntity createAcc(@ApiParam(value = "Account object that needs to be added to the store" ,required=true )  @Valid @RequestBody Account account
 ) {
-        String accept = request.getHeader("Accept");
-        return new ResponseEntity<Void>(HttpStatus.NOT_IMPLEMENTED);
+        try {
+            accountService.CreateAccount(account);
+            //String accept = request.getHeader("Accept");
+            return ResponseEntity.status(HttpStatus.OK).body(account);
+        }catch(IllegalArgumentException iae){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
 
     public ResponseEntity<Void> deleteAcc(@ApiParam(value = "User id to delete",required=true) @PathVariable("userId") Long userId

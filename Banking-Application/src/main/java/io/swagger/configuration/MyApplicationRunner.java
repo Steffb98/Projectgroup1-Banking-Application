@@ -34,8 +34,8 @@ public class MyApplicationRunner implements ApplicationRunner {
                 new Users("Bobby", "McBobface", "bobbyface@gmail.com", "Sterk")
         );
 
-        Account account = new Account("abc", new BigDecimal("10.00"), Account.TypeofaccountEnum.SAVING);
-        Account account2 = new Account("abc2", new BigDecimal("11.00"), Account.TypeofaccountEnum.DEPOSIT);
+        Account account = new Account(Account.TypeofaccountEnum.SAVING, 1);
+        Account account2 = new Account(Account.TypeofaccountEnum.DEPOSIT, 2);
         List<Account> accounts = Arrays.asList(account, account2);
 
         users.forEach(usersRepository::save);
