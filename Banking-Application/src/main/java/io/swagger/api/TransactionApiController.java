@@ -1,12 +1,9 @@
 package io.swagger.api;
 
-import java.math.BigDecimal;
-
-import io.swagger.service.TransactionService;
-import org.threeten.bp.OffsetDateTime;
 import io.swagger.model.Transaction;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.*;
+import io.swagger.service.TransactionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -26,7 +23,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2020-05-05T12:47:35.450Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2020-05-21T13:09:59.263Z[GMT]")
 @Controller
 public class TransactionApiController implements TransactionApi {
 
@@ -45,12 +42,7 @@ public class TransactionApiController implements TransactionApi {
         this.transactionService = transactionService;
     }
 
-    public ResponseEntity<Void> addTransaction(@ApiParam(value = "") @RequestParam(value="id", required=false)  Long id
-,@ApiParam(value = "") @RequestParam(value="from", required=false)  Long from
-,@ApiParam(value = "") @RequestParam(value="to", required=false)  Long to
-,@ApiParam(value = "") @RequestParam(value="amount", required=false)  BigDecimal amount
-,@ApiParam(value = "") @RequestParam(value="by", required=false)  Long by
-,@ApiParam(value = "") @RequestParam(value="date", required=false)  OffsetDateTime date
+    public ResponseEntity<Void> addTransaction(@ApiParam(value = "Transaction object that needs to be added to the store" ,required=true )  @Valid @RequestBody Transaction body
 ) {
         String accept = request.getHeader("Accept");
         return new ResponseEntity<Void>(HttpStatus.NOT_IMPLEMENTED);
@@ -60,7 +52,7 @@ public class TransactionApiController implements TransactionApi {
         String accept = request.getHeader("Accept");
         if (accept != null && accept.contains("application/json")) {
             try {
-                return new ResponseEntity<List<Transaction>>(objectMapper.readValue("[ {\n  \"date\" : \"2000-01-23T04:56:07.000+00:00\",\n  \"amount\" : 5.962133916683182,\n  \"by\" : 5,\n  \"from\" : 6,\n  \"id\" : 0,\n  \"to\" : 1\n}, {\n  \"date\" : \"2000-01-23T04:56:07.000+00:00\",\n  \"amount\" : 5.962133916683182,\n  \"by\" : 5,\n  \"from\" : 6,\n  \"id\" : 0,\n  \"to\" : 1\n} ]", List.class), HttpStatus.NOT_IMPLEMENTED);
+                return new ResponseEntity<List<Transaction>>(objectMapper.readValue("[ {\n  \"date\" : \"2000-01-23T04:56:07.000+00:00\",\n  \"amount\" : 6.027456183070403,\n  \"receiver\" : \"receiver\",\n  \"sender\" : \"sender\",\n  \"by\" : 1,\n  \"id\" : 0\n}, {\n  \"date\" : \"2000-01-23T04:56:07.000+00:00\",\n  \"amount\" : 6.027456183070403,\n  \"receiver\" : \"receiver\",\n  \"sender\" : \"sender\",\n  \"by\" : 1,\n  \"id\" : 0\n} ]", List.class), HttpStatus.NOT_IMPLEMENTED);
             } catch (IOException e) {
                 log.error("Couldn't serialize response for content type application/json", e);
                 return new ResponseEntity<List<Transaction>>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -75,7 +67,22 @@ public class TransactionApiController implements TransactionApi {
         String accept = request.getHeader("Accept");
         if (accept != null && accept.contains("application/json")) {
             try {
-                return new ResponseEntity<List<Transaction>>(objectMapper.readValue("[ {\n  \"date\" : \"2000-01-23T04:56:07.000+00:00\",\n  \"amount\" : 5.962133916683182,\n  \"by\" : 5,\n  \"from\" : 6,\n  \"id\" : 0,\n  \"to\" : 1\n}, {\n  \"date\" : \"2000-01-23T04:56:07.000+00:00\",\n  \"amount\" : 5.962133916683182,\n  \"by\" : 5,\n  \"from\" : 6,\n  \"id\" : 0,\n  \"to\" : 1\n} ]", List.class), HttpStatus.NOT_IMPLEMENTED);
+                return new ResponseEntity<List<Transaction>>(objectMapper.readValue("[ {\n  \"date\" : \"2000-01-23T04:56:07.000+00:00\",\n  \"amount\" : 6.027456183070403,\n  \"receiver\" : \"receiver\",\n  \"sender\" : \"sender\",\n  \"by\" : 1,\n  \"id\" : 0\n}, {\n  \"date\" : \"2000-01-23T04:56:07.000+00:00\",\n  \"amount\" : 6.027456183070403,\n  \"receiver\" : \"receiver\",\n  \"sender\" : \"sender\",\n  \"by\" : 1,\n  \"id\" : 0\n} ]", List.class), HttpStatus.NOT_IMPLEMENTED);
+            } catch (IOException e) {
+                log.error("Couldn't serialize response for content type application/json", e);
+                return new ResponseEntity<List<Transaction>>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        }
+
+        return new ResponseEntity<List<Transaction>>(HttpStatus.NOT_IMPLEMENTED);
+    }
+
+    public ResponseEntity<List<Transaction>> getTransactionFromUser(@ApiParam(value = "ID of a user",required=true) @PathVariable("userId") Long userId
+) {
+        String accept = request.getHeader("Accept");
+        if (accept != null && accept.contains("application/json")) {
+            try {
+                return new ResponseEntity<List<Transaction>>(objectMapper.readValue("[ {\n  \"date\" : \"2000-01-23T04:56:07.000+00:00\",\n  \"amount\" : 6.027456183070403,\n  \"receiver\" : \"receiver\",\n  \"sender\" : \"sender\",\n  \"by\" : 1,\n  \"id\" : 0\n}, {\n  \"date\" : \"2000-01-23T04:56:07.000+00:00\",\n  \"amount\" : 6.027456183070403,\n  \"receiver\" : \"receiver\",\n  \"sender\" : \"sender\",\n  \"by\" : 1,\n  \"id\" : 0\n} ]", List.class), HttpStatus.NOT_IMPLEMENTED);
             } catch (IOException e) {
                 log.error("Couldn't serialize response for content type application/json", e);
                 return new ResponseEntity<List<Transaction>>(HttpStatus.INTERNAL_SERVER_ERROR);

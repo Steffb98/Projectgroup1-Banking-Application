@@ -21,11 +21,9 @@ import javax.validation.constraints.*;
 import javax.validation.Valid;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.math.BigDecimal;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2020-05-05T12:47:35.450Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2020-05-21T13:09:59.263Z[GMT]")
 @Controller
 public class AccountApiController implements AccountApi {
 
@@ -44,47 +42,35 @@ public class AccountApiController implements AccountApi {
         this.accountService = accountService;
     }
 
-    public ResponseEntity createAcc(@ApiParam(value = "Account object that needs to be added to the store" ,required=true )  @Valid @RequestBody Account account
+    public ResponseEntity createAcc(@ApiParam(value = "Account object that needs to be added to the store" ,required=true )  @Valid @RequestBody Account body
 ) {
+        String accept = request.getHeader("Accept");
         try {
-            accountService.CreateAccount(account);
-            //String accept = request.getHeader("Accept");
-            return ResponseEntity.status(HttpStatus.OK).body(account);
-        }catch(IllegalArgumentException iae){
+            accountService.CreateAccount(body);
+            return ResponseEntity.status(HttpStatus.OK).body(body);
+        } catch (IllegalArgumentException iae) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
 
-    public ResponseEntity<Void> deleteAcc(@ApiParam(value = "User id to delete",required=true) @PathVariable("userId") Long userId
-,@ApiParam(value = "" ) @RequestHeader(value="api_key", required=false) String apiKey
-) {
-        String accept = request.getHeader("Accept");
-        return new ResponseEntity<Void>(HttpStatus.NOT_IMPLEMENTED);
-    }
-
-    public ResponseEntity<List<Account>> listAccounts() {
-        String accept = request.getHeader("Accept");
-        if (accept != null && accept.contains("application/json")) {
-            return ResponseEntity.status(200).body(accountService.getAllAccounts());
-        }
-
-        return new ResponseEntity<List<Account>>(HttpStatus.NOT_IMPLEMENTED);
-    }
-
-    public ResponseEntity<List<Account>> listSpecificAccount(@NotNull @ApiParam(value = "ID of user", required = true) @Valid @RequestParam(value = "userId", required = true) Long userId
-,@ApiParam(value = "Id of account",required=true) @PathVariable("accountId") Long accountId
-) {
+    public ResponseEntity<List<Account>> getAccountByUserID(@NotNull @ApiParam(value = "Account of user to show", required = true) @Valid @RequestParam(value = "userId", required = true) Long userId
+    ) {
         String accept = request.getHeader("Accept");
         if (accept != null && accept.contains("application/json")) {
             try {
-                return new ResponseEntity<List<Account>>(objectMapper.readValue("[ {\n  \"balance\" : 10.00,\n  \"iban\" : \"NL00RABO0123456789\",\n  \"typeofaccount\" : \"saving\"\n}, {\n  \"balance\" : 10.00,\n  \"iban\" : \"NL00RABO0123456789\",\n  \"typeofaccount\" : \"saving\"\n} ]", List.class), HttpStatus.NOT_IMPLEMENTED);
-            } catch (IOException e) {
-                log.error("Couldn't serialize response for content type application/json", e);
-                return new ResponseEntity<List<Account>>(HttpStatus.INTERNAL_SERVER_ERROR);
+                return ResponseEntity.status(HttpStatus.OK).body(accountService.getAccountsByUserId(userId));
+            } catch (IllegalArgumentException iae) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
             }
         }
 
         return new ResponseEntity<List<Account>>(HttpStatus.NOT_IMPLEMENTED);
+    }
+
+    public ResponseEntity<Void> toggleStatusAcc(@ApiParam(value = "AccountID to set to active or inactive",required=true) @PathVariable("accountId") String accountId
+) {
+        String accept = request.getHeader("Accept");
+        return new ResponseEntity<Void>(HttpStatus.NOT_IMPLEMENTED);
     }
 
 }

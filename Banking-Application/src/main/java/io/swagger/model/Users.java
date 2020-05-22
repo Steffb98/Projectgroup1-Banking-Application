@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import jdk.jfr.Enabled;
 import org.springframework.validation.annotation.Validated;
 
 import javax.persistence.*;
@@ -15,9 +16,9 @@ import javax.validation.constraints.*;
  * Users
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2020-05-05T12:47:35.450Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2020-05-21T13:09:59.263Z[GMT]")
 @Entity
-public class Users   {
+public class Users {
 
   @Id
   @SequenceGenerator(name = "user_seq", initialValue = 1)
@@ -36,6 +37,20 @@ public class Users   {
 
   @JsonProperty("password")
   private String password = null;
+
+  @JsonProperty("isactive")
+  private Boolean isactive = null;
+
+  public Users(String firstname, String lastname, String email, String password, Boolean isactive) {
+    this.firstname = firstname;
+    this.lastname = lastname;
+    this.email = email;
+    this.password = password;
+    this.isactive = isactive;
+  }
+
+  public Users() {
+  }
 
   public Users id(Long id) {
     this.id = id;
@@ -137,15 +152,26 @@ public class Users   {
     this.password = password;
   }
 
-  public Users() {
+  public Users isactive(Boolean isactive) {
+    this.isactive = isactive;
+    return this;
   }
 
-  public Users(String firstname, String lastname, String email, String password) {
-    this.firstname = firstname;
-    this.lastname = lastname;
-    this.email = email;
-    this.password = password;
+  /**
+   * Get isactive
+   * @return isactive
+  **/
+  @ApiModelProperty(example = "true", required = true, value = "")
+      @NotNull
+
+    public Boolean isIsactive() {
+    return isactive;
   }
+
+  public void setIsactive(Boolean isactive) {
+    this.isactive = isactive;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -160,12 +186,13 @@ public class Users   {
         Objects.equals(this.firstname, users.firstname) &&
         Objects.equals(this.lastname, users.lastname) &&
         Objects.equals(this.email, users.email) &&
-        Objects.equals(this.password, users.password);
+        Objects.equals(this.password, users.password) &&
+        Objects.equals(this.isactive, users.isactive);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, firstname, lastname, email, password);
+    return Objects.hash(id, firstname, lastname, email, password, isactive);
   }
 
   @Override
@@ -178,6 +205,7 @@ public class Users   {
     sb.append("    lastname: ").append(toIndentedString(lastname)).append("\n");
     sb.append("    email: ").append(toIndentedString(email)).append("\n");
     sb.append("    password: ").append(toIndentedString(password)).append("\n");
+    sb.append("    isactive: ").append(toIndentedString(isactive)).append("\n");
     sb.append("}");
     return sb.toString();
   }

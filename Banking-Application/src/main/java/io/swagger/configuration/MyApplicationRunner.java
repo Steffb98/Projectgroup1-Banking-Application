@@ -30,12 +30,12 @@ public class MyApplicationRunner implements ApplicationRunner {
     public void run(ApplicationArguments applicationArguments) throws Exception {
 
         List<Users> users = Arrays.asList(
-                new Users("Hayo", "Bos", "663143@student.inholland.nl", "wachtwoord"),
-                new Users("Bobby", "McBobface", "bobbyface@gmail.com", "Sterk")
+                new Users("Hayo", "Bos", "663143@student.inholland.nl", "wachtwoord", true),
+                new Users("Bobby", "McBobface", "bobbyface@gmail.com", "Sterk", true)
         );
 
-        Account account = new Account(Account.TypeofaccountEnum.SAVING, 1);
-        Account account2 = new Account(Account.TypeofaccountEnum.DEPOSIT, 2);
+        Account account = new Account(Account.TypeofaccountEnum.SAVING, new BigDecimal(-10.00), true,1L);
+        Account account2 = new Account(Account.TypeofaccountEnum.DEPOSIT, new BigDecimal(-10.00), true,2L);
         List<Account> accounts = Arrays.asList(account, account2);
 
         users.forEach(usersRepository::save);
@@ -43,5 +43,7 @@ public class MyApplicationRunner implements ApplicationRunner {
 
         accountRepository.findAll().forEach(System.out::println);
         usersRepository.findAll().forEach(System.out::println);
+
+        System.out.println(accountRepository);
     }
 }

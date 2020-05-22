@@ -18,14 +18,14 @@ public class AccountService {
     public void CreateAccount(Account account) {
         boolean duplicate = true;
         while (duplicate == true) {
-            account.GenerateIBAN();
+            account.setIban(account.GenerateIBAN());
             duplicate = CheckIBAN(account.getIban());
         }
         accountRepository.save(account);
     }
 
-    public List<Account> getAllAccounts() {
-        return (List<Account>) accountRepository.findAll();
+    public List<Account> getAccountsByUserId(Long userId) {
+        return null;
     }
 
     private boolean CheckIBAN(String iban){

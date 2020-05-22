@@ -24,25 +24,16 @@ import javax.validation.Valid;
 import javax.validation.constraints.*;
 import java.util.List;
 import java.util.Map;
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2020-05-05T12:47:35.450Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2020-05-21T13:09:59.263Z[GMT]")
 @Api(value = "users", description = "the users API")
-@RequestMapping(value = "/users")
 public interface UsersApi {
 
     @ApiOperation(value = "Create user", nickname = "createUser", notes = "This can only be done by admin form the bank.", tags={ "users", })
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "successful operation") })
-    @RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<Void> createUser(@PathVariable Users user);
-
-
-    @ApiOperation(value = "Delete user", nickname = "deleteUser", notes = "This can only be done by de admin.", tags={ "users", })
-    @ApiResponses(value = { 
-        @ApiResponse(code = 400, message = "Invalid email supplied"),
-        @ApiResponse(code = 404, message = "email not found") })
     @RequestMapping(value = "/users",
-        method = RequestMethod.DELETE)
-    ResponseEntity<Void> deleteUser(@ApiParam(value = "The email that needs to be deleted",required=true) @PathVariable("email") String email
+        method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    ResponseEntity<Void> createUser(@ApiParam(value = "Created user object",required=true) @PathVariable("body") Users body
 );
 
 
@@ -50,10 +41,20 @@ public interface UsersApi {
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "search results matching criteria", response = Users.class, responseContainer = "List"),
         @ApiResponse(code = 400, message = "bad input parameter") })
-    @RequestMapping(value = "",
-        produces = { "application/json" },
+    @RequestMapping(value = "/users",
+        produces = { "application/json" }, 
         method = RequestMethod.GET)
     ResponseEntity<List<Users>> getAllUsers();
+
+
+    @ApiOperation(value = "Changes user to active/inactive", nickname = "toggleUserStatus", notes = "This can only be done by the admin.", tags={ "users", })
+    @ApiResponses(value = { 
+        @ApiResponse(code = 400, message = "Invalid userID supplied"),
+        @ApiResponse(code = 404, message = "user not found") })
+    @RequestMapping(value = "/users/{id}",
+        method = RequestMethod.PUT)
+    ResponseEntity<Void> toggleUserStatus(@ApiParam(value = "The userID that needs to be set active or inactive",required=true) @PathVariable("id") Long id
+);
 
 
     @ApiOperation(value = "Updated user", nickname = "updateUser", notes = "This can only be done by the admin.", tags={ "users", })
