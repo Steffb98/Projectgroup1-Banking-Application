@@ -40,4 +40,19 @@ public class AccountService {
     public Account getAccountsByIban(String iban) {
         return accountRepository.findOne(iban);
     }
+
+    public void ToggleActivity(String iban) {
+        try {
+            Account account = accountRepository.findOne(iban);
+            if (account.getIsactive() == true){
+                account.setIsactive(false);
+            }
+            else{
+                account.setIsactive(true);
+            }
+            accountRepository.save(account);
+        }catch(Exception io){
+
+        }
+    }
 }
