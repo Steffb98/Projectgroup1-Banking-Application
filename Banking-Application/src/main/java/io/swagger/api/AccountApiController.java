@@ -53,6 +53,20 @@ public class AccountApiController implements AccountApi {
         }
     }
 
+    public ResponseEntity<Account> getAccountByIban(@NotNull @ApiParam(value = "Account of iban to show", required = true) @Valid @RequestParam(value = "iban", required = true) String iban
+    ) {
+        String accept = request.getHeader("Accept");
+        if (accept != null && accept.contains("application/json")) {
+            try {
+                return ResponseEntity.status(HttpStatus.OK).body(accountService.getAccountsByIban(iban));
+            } catch (IllegalArgumentException iae) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            }
+        }
+
+        return new ResponseEntity<Account>(HttpStatus.NOT_IMPLEMENTED);
+    }
+
     public ResponseEntity<List<Account>> getAccountByUserID(@NotNull @ApiParam(value = "Account of user to show", required = true) @Valid @RequestParam(value = "userId", required = true) Long userId
     ) {
         String accept = request.getHeader("Accept");

@@ -25,7 +25,7 @@ public class AccountService {
     }
 
     public List<Account> getAccountsByUserId(Long userId) {
-        return null;
+        return (List<Account>) accountRepository.findAccountsByUserid(userId);
     }
 
     private boolean CheckIBAN(String iban){
@@ -35,5 +35,9 @@ public class AccountService {
         }catch(Exception io){
             return true;
         }
+    }
+
+    public Account getAccountsByIban(String iban) {
+        return accountRepository.findOne(iban);
     }
 }
