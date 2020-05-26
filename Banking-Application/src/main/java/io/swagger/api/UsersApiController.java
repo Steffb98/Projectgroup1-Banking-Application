@@ -9,20 +9,15 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.*;
 import javax.validation.Valid;
 import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
 import java.util.List;
-import java.util.Map;
+
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2020-05-21T13:09:59.263Z[GMT]")
 @Controller
 public class UsersApiController implements UsersApi {
@@ -47,7 +42,7 @@ public class UsersApiController implements UsersApi {
         String accept = request.getHeader("Accept");
         try {
             usersService.addUser(body);
-            return ResponseEntity.status(HttpStatus.OK).body(body);
+            return ResponseEntity.status(HttpStatus.CREATED).body(body.getEmail());
         } catch (IllegalArgumentException iae) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
@@ -58,23 +53,38 @@ public class UsersApiController implements UsersApi {
         if (accept != null && accept.contains("application/json")) {
             return ResponseEntity.status(200).body(usersService.getAllUsers());
         }
-
-        return  ResponseEntity.status(200).body(usersService.getAllUsers());
+        return new ResponseEntity<List<Users>>(HttpStatus.NOT_IMPLEMENTED);
     }
 
-    public ResponseEntity<Void> toggleUserStatus(@ApiParam(value = "The userID that needs to be set active or inactive",required=true) @PathVariable("id") Long id
+    public ResponseEntity toggleUserStatus(@ApiParam(value = "The userID that needs to be set active or inactive",required=true) @PathVariable("id") Long id
 ) {
         String accept = request.getHeader("Accept");
-        return new ResponseEntity<Void>(HttpStatus.NOT_IMPLEMENTED);
+        try {
+            if(usersService.getUserById(id) == null){
+                return ResponseEntity.status(400).build();
+            }else{
+                usersService.toggleUser(id);
+                return ResponseEntity.status(HttpStatus.OK).body(usersService.getAllUsers());
+            }
+        } catch (IllegalArgumentException iae) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
 
-    public ResponseEntity<Void> updateUser(@ApiParam(value = "User object that needs to be added to the store" ,required=true )  @Valid @RequestBody Users body
-,@ApiParam(value = "email that need to be updated",required=true) @PathVariable("email") String email
-,@ApiParam(value = "password that need to be updated",required=true) @PathVariable("password") String password
-,@ApiParam(value = "Updated user object",required=true) @PathVariable("name") Users name
+    public ResponseEntity updateUser(@ApiParam(value = "User id" ,required=true )  @PathVariable("id") Long id
+,@ApiParam(value = "New email",required=true) @PathVariable("email") String email
+,@ApiParam(value = "New password",required=true) @PathVariable("password") String password
 ) {
         String accept = request.getHeader("Accept");
-        return new ResponseEntity<Void>(HttpStatus.NOT_IMPLEMENTED);
+        if(accept != null && accept.contains("application/json")) {
+            try {
+                usersService.updateUser(id, email, password);
+                return ResponseEntity.status(HttpStatus.OK).body(usersService.getAllUsers());
+            } catch (IllegalArgumentException iae) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            }
+        }
+        return new ResponseEntity<Users>(HttpStatus.NOT_IMPLEMENTED);
     }
 
     public ResponseEntity<Users> userid(@ApiParam(value = "ID of specific user",required=true) @PathVariable("id") Long id
@@ -82,13 +92,18 @@ public class UsersApiController implements UsersApi {
         String accept = request.getHeader("Accept");
         if (accept != null && accept.contains("application/json")) {
             try {
-                return new ResponseEntity<Users>(objectMapper.readValue("{\n  \"firstname\" : \"firstname\",\n  \"password\" : \"password\",\n  \"isactive\" : true,\n  \"id\" : 0,\n  \"email\" : \"inholland@student.nl\",\n  \"lastname\" : \"lastname\"\n}", Users.class), HttpStatus.NOT_IMPLEMENTED);
-            } catch (IOException e) {
-                log.error("Couldn't serialize response for content type application/json", e);
-                return new ResponseEntity<Users>(HttpStatus.INTERNAL_SERVER_ERROR);
+                if(usersService.getUserById(id) == null){
+                    return ResponseEntity.status(400).build();
+                }else{
+                    return ResponseEntity.status(HttpStatus.OK).body(usersService.getUserById(id));
+                }
+
+            } catch (IllegalArgumentException iae) {
+
+                log.error("The id is not valid", iae);
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
             }
         }
-
         return new ResponseEntity<Users>(HttpStatus.NOT_IMPLEMENTED);
     }
 
