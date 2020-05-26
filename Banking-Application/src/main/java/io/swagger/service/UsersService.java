@@ -44,6 +44,7 @@ public class UsersService {
         Users user = usersRepository.findOne(id);
         user.setEmail(email);
         user.setPassword(password);
+        usersRepository.save(user);
     }
 
     public Users login(String email, String password){
