@@ -55,7 +55,7 @@ public class MyApplicationRunner implements ApplicationRunner {
 
         //System.out.println(transactionRepository.findOne(101L));
         //System.out.println(transactionRepository.getAllByBy_IdOrderByDate(50L));
-        System.out.println("-------------");
+        System.out.println("----------------");
         System.out.println(transactionRepository.getTransactionsByAccount(account.getIban()));
 
 
