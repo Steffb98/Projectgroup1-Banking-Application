@@ -71,9 +71,9 @@ public class UsersApiController implements UsersApi {
         }
     }
 
-    public ResponseEntity updateUser(@ApiParam(value = "User id" ,required=true )  @PathVariable("id") Long id
-,@ApiParam(value = "New email",required=true) @PathVariable("email") String email
-,@ApiParam(value = "New password",required=true) @PathVariable("password") String password
+    public ResponseEntity updateUser(@ApiParam(value = "User id" ,required=true )  @Valid @RequestParam(value = "id", required = true) Long id
+,@ApiParam(value = "New email",required=true) @Valid @RequestParam(value = "email", required = true) String email
+,@ApiParam(value = "New password",required=true) @Valid @RequestParam(value = "password", required = true) String password
 ) {
         String accept = request.getHeader("Accept");
         if(accept != null && accept.contains("application/json")) {
