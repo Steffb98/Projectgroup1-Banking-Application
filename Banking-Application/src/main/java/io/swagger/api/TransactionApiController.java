@@ -42,39 +42,44 @@ public class TransactionApiController implements TransactionApi {
         this.transactionService = transactionService;
     }
 
-    public ResponseEntity<Void> addTransaction(@ApiParam(value = "Transaction object that needs to be added to the store" ,required=true )  @Valid @RequestBody Transaction body
+    public ResponseEntity addTransaction(@ApiParam(value = "Transaction object that needs to be added to the store" ,required=true )  @Valid @RequestBody Transaction body
 ) {
         String accept = request.getHeader("Accept");
-        return new ResponseEntity<Void>(HttpStatus.NOT_IMPLEMENTED);
+        try {
+            transactionService.addTransaction(body);
+            return  ResponseEntity.status(HttpStatus.OK).body(body);
+        } catch (IllegalArgumentException iae) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+
     }
 
     public ResponseEntity<List<Transaction>> getAllTransactions() {
         String accept = request.getHeader("Accept");
         if (accept != null && accept.contains("application/json")) {
             try {
-                return new ResponseEntity<List<Transaction>>(objectMapper.readValue("[ {\n  \"date\" : \"2000-01-23T04:56:07.000+00:00\",\n  \"amount\" : 6.027456183070403,\n  \"receiver\" : \"receiver\",\n  \"sender\" : \"sender\",\n  \"by\" : 1,\n  \"id\" : 0\n}, {\n  \"date\" : \"2000-01-23T04:56:07.000+00:00\",\n  \"amount\" : 6.027456183070403,\n  \"receiver\" : \"receiver\",\n  \"sender\" : \"sender\",\n  \"by\" : 1,\n  \"id\" : 0\n} ]", List.class), HttpStatus.NOT_IMPLEMENTED);
-            } catch (IOException e) {
-                log.error("Couldn't serialize response for content type application/json", e);
-                return new ResponseEntity<List<Transaction>>(HttpStatus.INTERNAL_SERVER_ERROR);
+                return ResponseEntity.status(200).body(transactionService.getAllTransactions());
+            } catch (IllegalArgumentException iae) {
+                return ResponseEntity.status(400).build();
             }
         }
 
         return new ResponseEntity<List<Transaction>>(HttpStatus.NOT_IMPLEMENTED);
     }
 
-    public ResponseEntity<List<Transaction>> getTransactionById(@ApiParam(value = "ID of transaction to return",required=true) @PathVariable("transactionId") Long transactionId
+    public ResponseEntity<Transaction> getTransactionById(@ApiParam(value = "ID of transaction to return",required=true) @PathVariable("transactionId") Long transactionId
 ) {
         String accept = request.getHeader("Accept");
         if (accept != null && accept.contains("application/json")) {
             try {
-                return new ResponseEntity<List<Transaction>>(objectMapper.readValue("[ {\n  \"date\" : \"2000-01-23T04:56:07.000+00:00\",\n  \"amount\" : 6.027456183070403,\n  \"receiver\" : \"receiver\",\n  \"sender\" : \"sender\",\n  \"by\" : 1,\n  \"id\" : 0\n}, {\n  \"date\" : \"2000-01-23T04:56:07.000+00:00\",\n  \"amount\" : 6.027456183070403,\n  \"receiver\" : \"receiver\",\n  \"sender\" : \"sender\",\n  \"by\" : 1,\n  \"id\" : 0\n} ]", List.class), HttpStatus.NOT_IMPLEMENTED);
-            } catch (IOException e) {
-                log.error("Couldn't serialize response for content type application/json", e);
-                return new ResponseEntity<List<Transaction>>(HttpStatus.INTERNAL_SERVER_ERROR);
+                return ResponseEntity.status(200).body(transactionService.getTransactionById(transactionId));
+            } catch (IllegalArgumentException iae) {
+                log.error("Not a valid ID", iae);
+                return ResponseEntity.status(400).build();
             }
         }
 
-        return new ResponseEntity<List<Transaction>>(HttpStatus.NOT_IMPLEMENTED);
+        return new ResponseEntity<Transaction>(HttpStatus.NOT_IMPLEMENTED);
     }
 
     public ResponseEntity<List<Transaction>> getTransactionFromUser(@ApiParam(value = "ID of a user",required=true) @PathVariable("userId") Long userId
@@ -82,10 +87,24 @@ public class TransactionApiController implements TransactionApi {
         String accept = request.getHeader("Accept");
         if (accept != null && accept.contains("application/json")) {
             try {
-                return new ResponseEntity<List<Transaction>>(objectMapper.readValue("[ {\n  \"date\" : \"2000-01-23T04:56:07.000+00:00\",\n  \"amount\" : 6.027456183070403,\n  \"receiver\" : \"receiver\",\n  \"sender\" : \"sender\",\n  \"by\" : 1,\n  \"id\" : 0\n}, {\n  \"date\" : \"2000-01-23T04:56:07.000+00:00\",\n  \"amount\" : 6.027456183070403,\n  \"receiver\" : \"receiver\",\n  \"sender\" : \"sender\",\n  \"by\" : 1,\n  \"id\" : 0\n} ]", List.class), HttpStatus.NOT_IMPLEMENTED);
-            } catch (IOException e) {
-                log.error("Couldn't serialize response for content type application/json", e);
-                return new ResponseEntity<List<Transaction>>(HttpStatus.INTERNAL_SERVER_ERROR);
+                return ResponseEntity.status(200).body(transactionService.getAllTransactionsFromUser(userId));
+            } catch (IllegalArgumentException iae) {
+                log.error("Not a valid ID", iae);
+                return ResponseEntity.status(400).build();
+            }
+        }
+
+        return new ResponseEntity<List<Transaction>>(HttpStatus.NOT_IMPLEMENTED);
+    }
+
+    public ResponseEntity<List<Transaction>> getTransactionFromAcount(String acountId) {
+        String accept = request.getHeader("Accept");
+        if (accept != null && accept.contains("application/json")) {
+            try {
+                return ResponseEntity.status(200).body(transactionService.getAllTransactionsFromAccount(acountId));
+            } catch (IllegalArgumentException iae) {
+                log.error("Not a valid ID", iae);
+                return ResponseEntity.status(400).build();
             }
         }
 
