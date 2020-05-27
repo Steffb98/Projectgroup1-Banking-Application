@@ -48,7 +48,8 @@ public interface UsersApi {
 
 
     @ApiOperation(value = "Changes user to active/inactive", nickname = "toggleUserStatus", notes = "This can only be done by the admin.", tags={ "users", })
-    @ApiResponses(value = { 
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "successful operation", response = Users.class),
         @ApiResponse(code = 400, message = "Invalid userID supplied"),
         @ApiResponse(code = 404, message = "user not found") })
     @RequestMapping(value = "/users/{id}",
@@ -58,18 +59,17 @@ public interface UsersApi {
 
 
     @ApiOperation(value = "Updated user", nickname = "updateUser", notes = "This can only be done by the admin.", tags={ "users", })
-    @ApiResponses(value = { 
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "successful operation", response = Users.class),
         @ApiResponse(code = 400, message = "Invalid user supplied"),
         @ApiResponse(code = 404, message = "User not found") })
     @RequestMapping(value = "/users",
-        consumes = { "application/json", "application/xml" },
+            produces = { "application/json" },
         method = RequestMethod.PUT)
-    ResponseEntity<Void> updateUser(@ApiParam(value = "User object that needs to be added to the store" ,required=true )  @Valid @RequestBody Users body
-,@ApiParam(value = "email that need to be updated",required=true) @PathVariable("email") String email
-,@ApiParam(value = "password that need to be updated",required=true) @PathVariable("password") String password
-,@ApiParam(value = "Updated user object",required=true) @PathVariable("name") Users name
+    ResponseEntity<Void> updateUser(@ApiParam(value = "User id" ,required=true )  @Valid @RequestParam(value = "id", required = true) Long id
+,@ApiParam(value = "new email",required=true) @Valid @RequestParam(value = "email", required = true) String email
+,@ApiParam(value = "new password",required=true) @Valid @RequestParam(value = "password", required = true) String password
 );
-
 
     @ApiOperation(value = "get a user with specific id", nickname = "userid", notes = "find a user with a specific id", response = Users.class, tags={ "users", })
     @ApiResponses(value = { 
