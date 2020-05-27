@@ -3,6 +3,7 @@ package io.swagger.model;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import jdk.jfr.Enabled;
@@ -41,12 +42,45 @@ public class Users {
   @JsonProperty("isactive")
   private Boolean isactive = null;
 
-  public Users(String firstname, String lastname, String email, String password, Boolean isactive) {
+  @JsonProperty("typeofuser")
+  private Users.TypeofuserEnum typeofuser = null;
+
+  public enum TypeofuserEnum {
+    EMPLOYEE("employee"),
+
+    CUSTOMER("customer");
+
+    private String value;
+
+    TypeofuserEnum(String value) {
+      this.value = value;
+    }
+
+    @Override
+    @JsonValue
+    public String toString() {
+      return String.valueOf(value);
+    }
+
+    @JsonCreator
+    public static Users.TypeofuserEnum fromValue(String text) {
+      for (Users.TypeofuserEnum b : Users.TypeofuserEnum.values()) {
+        if (String.valueOf(b.value).equals(text)) {
+          return b;
+        }
+      }
+      return null;
+    }
+  }
+
+
+  public Users(String firstname, String lastname, String email, String password, Boolean isactive, TypeofuserEnum typeofuser) {
     this.firstname = firstname;
     this.lastname = lastname;
     this.email = email;
     this.password = password;
     this.isactive = isactive;
+    this.typeofuser = typeofuser;
   }
 
   public Users() {
@@ -187,12 +221,13 @@ public class Users {
         Objects.equals(this.lastname, users.lastname) &&
         Objects.equals(this.email, users.email) &&
         Objects.equals(this.password, users.password) &&
-        Objects.equals(this.isactive, users.isactive);
+        Objects.equals(this.isactive, users.isactive) &&
+         Objects.equals(this.typeofuser, users.typeofuser);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, firstname, lastname, email, password, isactive);
+    return Objects.hash(id, firstname, lastname, email, password, isactive, typeofuser);
   }
 
   @Override
@@ -206,6 +241,7 @@ public class Users {
     sb.append("    email: ").append(toIndentedString(email)).append("\n");
     sb.append("    password: ").append(toIndentedString(password)).append("\n");
     sb.append("    isactive: ").append(toIndentedString(isactive)).append("\n");
+    sb.append("    typeofuser: ").append(toIndentedString(typeofuser)).append("\n");
     sb.append("}");
     return sb.toString();
   }
