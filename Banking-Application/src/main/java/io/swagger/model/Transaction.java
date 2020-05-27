@@ -27,17 +27,20 @@ public class Transaction   {
   @JsonProperty("id")
   private Long id = null;
 
+  @ManyToOne
   @JsonProperty("sender")
-  private String sender = null;
+  private Account sender = null;
 
+  @ManyToOne
   @JsonProperty("receiver")
-  private String receiver = null;
+  private Account receiver = null;
 
   @JsonProperty("amount")
   private BigDecimal amount = null;
 
+  @ManyToOne
   @JsonProperty("by")
-  private Long by = null;
+  private Users by = null;
 
   @JsonProperty("date")
   private OffsetDateTime date = null;
@@ -45,6 +48,17 @@ public class Transaction   {
   public Transaction id(Long id) {
     this.id = id;
     return this;
+  }
+
+  public Transaction(Account sender, Account receiver, BigDecimal amount, Users by) {
+    this.sender = sender;
+    this.receiver = receiver;
+    this.amount = amount;
+    this.by = by;
+    this.date = OffsetDateTime.now();
+  }
+
+  public Transaction() {
   }
 
   /**
@@ -62,7 +76,7 @@ public class Transaction   {
     this.id = id;
   }
 
-  public Transaction sender(String sender) {
+  public Transaction sender(Account sender) {
     this.sender = sender;
     return this;
   }
@@ -74,15 +88,15 @@ public class Transaction   {
   @ApiModelProperty(required = true, value = "iban form the sender account")
       @NotNull
 
-    public String getSender() {
+    public Account getSender() {
     return sender;
   }
 
-  public void setSender(String sender) {
+  public void setSender(Account sender) {
     this.sender = sender;
   }
 
-  public Transaction receiver(String receiver) {
+  public Transaction receiver(Account receiver) {
     this.receiver = receiver;
     return this;
   }
@@ -94,11 +108,11 @@ public class Transaction   {
   @ApiModelProperty(required = true, value = "iban from the receiver account")
       @NotNull
 
-    public String getReceiver() {
+    public Account getReceiver() {
     return receiver;
   }
 
-  public void setReceiver(String receiver) {
+  public void setReceiver(Account receiver) {
     this.receiver = receiver;
   }
 
@@ -123,7 +137,7 @@ public class Transaction   {
     this.amount = amount;
   }
 
-  public Transaction by(Long by) {
+  public Transaction by(Users by) {
     this.by = by;
     return this;
   }
@@ -135,11 +149,11 @@ public class Transaction   {
   @ApiModelProperty(required = true, value = "UserId from the user")
       @NotNull
 
-    public Long getBy() {
+    public Users getBy() {
     return by;
   }
 
-  public void setBy(Long by) {
+  public void setBy(Users by) {
     this.by = by;
   }
 

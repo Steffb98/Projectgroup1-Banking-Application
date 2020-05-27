@@ -2,6 +2,8 @@ package io.swagger.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.*;
+import io.swagger.model.Users;
+import io.swagger.service.UsersService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -31,26 +33,32 @@ public class UserApiController implements UserApi {
 
     private final HttpServletRequest request;
 
+    private UsersService usersService;
+
     @org.springframework.beans.factory.annotation.Autowired
-    public UserApiController(ObjectMapper objectMapper, HttpServletRequest request) {
+    public UserApiController(ObjectMapper objectMapper, HttpServletRequest request,UsersService usersService) {
         this.objectMapper = objectMapper;
         this.request = request;
+        this.usersService = usersService;
     }
 
-    public ResponseEntity<String> loginUser(@NotNull @ApiParam(value = "The email for login", required = true) @Valid @RequestParam(value = "email", required = true) String email
+    public ResponseEntity loginUser(@NotNull @ApiParam(value = "The email for login", required = true) @Valid @RequestParam(value = "email", required = true) String email
 ,@NotNull @ApiParam(value = "The password for login in clear text", required = true) @Valid @RequestParam(value = "password", required = true) String password
 ) {
         String accept = request.getHeader("Accept");
-        if (accept != null && accept.contains("application/json")) {
-            try {
-                return new ResponseEntity<String>(objectMapper.readValue("\"\"", String.class), HttpStatus.NOT_IMPLEMENTED);
-            } catch (IOException e) {
-                log.error("Couldn't serialize response for content type application/json", e);
-                return new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
-            }
-        }
 
-        return new ResponseEntity<String>(HttpStatus.NOT_IMPLEMENTED);
+        try {
+            Users user= usersService.login(email, password);
+            if(user == null){
+                return ResponseEntity.status(400).build();
+            }
+            else{
+                return ResponseEntity.status(HttpStatus.OK).body(user);
+            }
+        }catch (IllegalArgumentException iae) {
+            log.error("Incorrect email or password", iae);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
 
     public ResponseEntity<Void> logoutUser() {
