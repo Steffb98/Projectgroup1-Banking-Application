@@ -42,15 +42,37 @@ public class AccountApiController implements AccountApi {
         this.accountService = accountService;
     }
 
-    public ResponseEntity createAcc(@ApiParam(value = "Account object that needs to be added to the store" ,required=true )  @Valid @RequestBody Account body
-) {
+    public ResponseEntity createAcc(@ApiParam(value = "Account object that needs to be added to the store" ,required=true )  @Valid @RequestBody Account account
+)   {
         String accept = request.getHeader("Accept");
         try {
-            accountService.CreateAccount(body);
-            return ResponseEntity.status(HttpStatus.OK).body(body);
+            accountService.CreateAccount(account);
+            return ResponseEntity.status(HttpStatus.OK).body(account);
         } catch (IllegalArgumentException iae) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
+    }
+
+    //TODO: Make simpler method, Duplicate code met togglestatus?
+    public ResponseEntity<Account> getAccountByIban(@NotNull @ApiParam(value = "Account of iban to show", required = true) @Valid @RequestParam(value = "iban", required = true) String iban
+    ) {
+        String accept = request.getHeader("Accept");
+        if (accept != null && accept.contains("application/json")) {
+            if (iban.length() == 22) {
+                Account acc = accountService.getAccountsByIban(iban);
+                if (acc != null){
+                    return ResponseEntity.status(HttpStatus.OK).body(acc);
+                }
+                else{
+                    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(acc);
+                }
+            }
+            else{
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(accountService.getAccountsByIban(iban));
+            }
+        }
+        //TODO: verwijderen???
+        return new ResponseEntity<Account>(HttpStatus.I_AM_A_TEAPOT);
     }
 
     public ResponseEntity<List<Account>> getAccountByUserID(@NotNull @ApiParam(value = "Account of user to show", required = true) @Valid @RequestParam(value = "userId", required = true) Long userId
@@ -63,14 +85,29 @@ public class AccountApiController implements AccountApi {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
             }
         }
-
+        //TODO: verwijderen???
         return new ResponseEntity<List<Account>>(HttpStatus.NOT_IMPLEMENTED);
     }
 
-    public ResponseEntity<Void> toggleStatusAcc(@ApiParam(value = "AccountID to set to active or inactive",required=true) @PathVariable("accountId") String accountId
-) {
+    public ResponseEntity toggleStatusAcc(@ApiParam(value = "AccountID to set to active or inactive",required=true) @PathVariable("accountId") String iban
+)   {
         String accept = request.getHeader("Accept");
-        return new ResponseEntity<Void>(HttpStatus.NOT_IMPLEMENTED);
+        try {
+            if (iban.length() == 22) {
+                Account acc = accountService.getAccountsByIban(iban);
+                if (acc != null) {
+                    accountService.ToggleActivity(iban);
+                    return ResponseEntity.status(HttpStatus.OK).body(iban);
+                }
+                else{
+                    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(acc);
+                }
+            }else{
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(accountService.getAccountsByIban(iban));
+            }
+        } catch (IllegalArgumentException iae) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
 
 }

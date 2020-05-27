@@ -179,7 +179,7 @@ public class Account   {
   @ApiModelProperty(example = "true", required = true, value = "")
       @NotNull
 
-    public Boolean isIsactive() {
+    public Boolean getIsactive() {
     return isactive;
   }
 
@@ -199,7 +199,7 @@ public class Account   {
   @ApiModelProperty(example = "true", required = true, value = "")
   @NotNull
 
-  public Long userId() {
+  public Long getUserId() {
     return userid;
   }
 
