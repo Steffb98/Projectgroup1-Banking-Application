@@ -81,7 +81,7 @@ public class UsersApiController implements UsersApi {
                 usersService.updateUser(id, email, password);
                 return ResponseEntity.status(HttpStatus.OK).body(usersService.getAllUsers());
             } catch (IllegalArgumentException iae) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+                return ResponseEntity.status(400).build();
             }
         }
         return new ResponseEntity<Users>(HttpStatus.NOT_IMPLEMENTED);
