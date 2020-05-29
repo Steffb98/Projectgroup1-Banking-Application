@@ -53,10 +53,8 @@ public class MyApplicationRunner implements ApplicationRunner {
         usersRepository.findAll().forEach(System.out::println);
         transactionRepository.findAll().forEach(System.out::println);
 
-        //System.out.println(transactionRepository.findOne(101L));
-        //System.out.println(transactionRepository.getAllByBy_IdOrderByDate(50L));
         System.out.println("----------------");
-        System.out.println(transactionRepository.getTransactionsByAccount(account.getIban()));
+        System.out.println(usersRepository.getAllByFirstname("Hayo"));
 
 
         //System.out.println(accountRepository);

@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -106,5 +107,21 @@ public class UsersApiController implements UsersApi {
         }
         return new ResponseEntity<Users>(HttpStatus.NOT_IMPLEMENTED);
     }
+
+    public ResponseEntity<List<Users>> getUserByName(@ApiParam(value = "Name of specific user",required=true) @PathVariable("id") String name
+    ) {
+        String accept = request.getHeader("Accept");
+        if (accept != null && accept.contains("application/json")) {
+            try {
+                return ResponseEntity.status(HttpStatus.OK).body(usersService.getUserByName(name));
+            } catch (IllegalArgumentException iae) {
+
+                log.error("The name is not valid", iae);
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            }
+        }
+        return new ResponseEntity(HttpStatus.NOT_IMPLEMENTED);
+    }
+
 
 }
