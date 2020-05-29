@@ -20,6 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2020-05-21T13:09:59.263Z[GMT]")
+@CrossOrigin(origins = {"http://localhost"})
 @Controller
 public class UsersApiController implements UsersApi {
 
