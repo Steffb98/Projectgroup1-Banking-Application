@@ -52,4 +52,8 @@ public class UsersService {
         return usersRepository.findUserByEmailAndPassword(email,password);
 
     }
+
+    public List<Users> getUserByName(String name){
+        return (List<Users>) usersRepository.GetUserByName(name);
+    }
 }
