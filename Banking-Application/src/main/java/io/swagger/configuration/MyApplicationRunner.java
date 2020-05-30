@@ -33,6 +33,7 @@ public class MyApplicationRunner implements ApplicationRunner {
 
         List<Users> users = Arrays.asList(
                 new Users("Hayo", "Bos", "663143@student.inholland.nl", "wachtwoord", true, Users.TypeofuserEnum.EMPLOYEE),
+                new Users("Hayo", "Bos", "1", "1", true, Users.TypeofuserEnum.EMPLOYEE),
                 new Users("Bobby", "McBobface", "bobbyface@gmail.com", "Sterk!", true, Users.TypeofuserEnum.CUSTOMER)
         );
 
@@ -53,10 +54,8 @@ public class MyApplicationRunner implements ApplicationRunner {
         usersRepository.findAll().forEach(System.out::println);
         transactionRepository.findAll().forEach(System.out::println);
 
-        //System.out.println(transactionRepository.findOne(101L));
-        //System.out.println(transactionRepository.getAllByBy_IdOrderByDate(50L));
         System.out.println("----------------");
-        System.out.println(transactionRepository.getTransactionsByAccount(account.getIban()));
+        System.out.println(usersRepository.getAllByFirstname("Hayo"));
 
 
         //System.out.println(accountRepository);
