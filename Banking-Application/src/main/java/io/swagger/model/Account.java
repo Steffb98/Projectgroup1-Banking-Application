@@ -263,7 +263,7 @@ public class Account   {
       int n = rand.nextInt(10) + 0;
       IBAN += Integer.toString(n);
     }
-    IBAN += " BLUE";
+    IBAN += " INHO";
     for (int i = 0; i < 13; i++) {
       if (i % 5 == 0) {
         IBAN += " ";
@@ -274,4 +274,6 @@ public class Account   {
     }
     return IBAN;
   }
+
+
 }
