@@ -81,5 +81,14 @@ public interface UsersApi {
         method = RequestMethod.GET)
     ResponseEntity<Users> userid(@ApiParam(value = "ID of specific user",required=true) @PathVariable("id") Long id
 );
+    @ApiOperation(value = "get a user with specific name", nickname = "userName", notes = "find a user with a specific name", response = Users.class, tags={ "users", })
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "successful operation", response = Users.class),
+            @ApiResponse(code = 404, message = "name not found") })
+    @RequestMapping(value = "/users/search",
+            produces = { "application/json" },
+            method = RequestMethod.GET)
+    ResponseEntity<List<Users>> getUserByName(@NotNull @ApiParam(value = "search user by name", required = true) @Valid @RequestParam(value = "name", required = true) String name
+    );
 
 }

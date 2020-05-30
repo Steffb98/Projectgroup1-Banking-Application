@@ -19,8 +19,9 @@ import javax.validation.Valid;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2020-05-21T13:09:59.263Z[GMT]")
 @CrossOrigin(origins = {"http://localhost"})
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2020-05-21T13:09:59.263Z[GMT]")
+
 @Controller
 public class UsersApiController implements UsersApi {
 
@@ -83,7 +84,7 @@ public class UsersApiController implements UsersApi {
                 usersService.updateUser(id, email, password);
                 return ResponseEntity.status(HttpStatus.OK).body(usersService.getAllUsers());
             } catch (IllegalArgumentException iae) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+                return ResponseEntity.status(400).build();
             }
         }
         return new ResponseEntity<Users>(HttpStatus.NOT_IMPLEMENTED);
@@ -109,12 +110,17 @@ public class UsersApiController implements UsersApi {
         return new ResponseEntity<Users>(HttpStatus.NOT_IMPLEMENTED);
     }
 
-    public ResponseEntity<List<Users>> getUserByName(@ApiParam(value = "Name of specific user",required=true) @PathVariable("id") String name
+    public ResponseEntity<List<Users>> getUserByName(@NotNull @ApiParam(value = "Search by name", required = true)@Valid @RequestParam(value = "name", required = true) String name
     ) {
         String accept = request.getHeader("Accept");
         if (accept != null && accept.contains("application/json")) {
             try {
-                return ResponseEntity.status(HttpStatus.OK).body(usersService.getUserByName(name));
+
+                if(usersService.getUserByName(name).isEmpty()){
+                    return ResponseEntity.status(404).build();
+                }else{
+                    return ResponseEntity.status(200).body(usersService.getUserByName(name));
+                }
             } catch (IllegalArgumentException iae) {
 
                 log.error("The name is not valid", iae);
