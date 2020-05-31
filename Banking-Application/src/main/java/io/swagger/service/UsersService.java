@@ -1,6 +1,7 @@
 package io.swagger.service;
 
 import io.swagger.dao.UsersRepository;
+import io.swagger.model.Account;
 import io.swagger.model.Users;
 import org.springframework.stereotype.Service;
 
@@ -31,12 +32,19 @@ public class UsersService {
 
     public void toggleUser(Long id)
     {
-        Users u = usersRepository.findOne(id);
-        if(u.isIsactive() == false){
-            u.setIsactive(true);
-        }else{
-            u.setIsactive(false);
+        try {
+            Users u = usersRepository.findOne(id);
+            if(u.isIsactive() == false){
+                u.setIsactive(true);
+            }
+            else{
+                u.setIsactive(false);
+            }
+            usersRepository.save(u);
+        }catch(Exception io){
+
         }
+
     }
 
     public void updateUser(Long id, String email, String password)
