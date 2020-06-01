@@ -32,8 +32,9 @@ public interface UsersApi {
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "successful operation") })
     @RequestMapping(value = "/users",
-        method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<Void> createUser(@ApiParam(value = "Created user object",required=true) @PathVariable("body") Users body
+        consumes = { "application/json" },
+        method = RequestMethod.POST)
+    ResponseEntity<Void> createUser(@ApiParam(value = "Created user object",required=true) @Valid @RequestBody Users body
 );
 
 

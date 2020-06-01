@@ -37,8 +37,8 @@ public class MyApplicationRunner implements ApplicationRunner {
                 new Users("Bobby", "McBobface", "bobbyface@gmail.com", "Sterk!", true, Users.TypeofuserEnum.CUSTOMER)
         );
 
-        Account account = new Account(Account.TypeofaccountEnum.SAVING, new BigDecimal(-10.00), true,1L);
-        Account account2 = new Account(Account.TypeofaccountEnum.DEPOSIT, new BigDecimal(-10.00), true,2L);
+        Account account = new Account(Account.TypeofaccountEnum.SAVING, new BigDecimal(-10.00), true,50L);
+        Account account2 = new Account(Account.TypeofaccountEnum.DEPOSIT, new BigDecimal(-10.00), true,50L);
         List<Account> accounts = Arrays.asList(account, account2);
 
         List<Transaction> transactions = Arrays.asList(
