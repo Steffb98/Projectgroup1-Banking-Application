@@ -31,7 +31,7 @@ public interface AccountApi {
     @ApiResponses(value = { 
         @ApiResponse(code = 405, message = "Invalid input") })
     @RequestMapping(value = "/account",
-        consumes = { "application/json", "application/xml" },
+        consumes = { "application/json" },
         method = RequestMethod.POST)
     ResponseEntity<Void> createAcc(@ApiParam(value = "Account object that needs to be added to the store" ,required=true )  @Valid @RequestBody Account body
     );
