@@ -187,7 +187,7 @@ public class Account   {
     this.isactive = isactive;
   }
 
-  public Account userId(Long userid) {
+  public Account userid(Long userid) {
     this.userid = userid;
     return this;
   }
@@ -196,10 +196,10 @@ public class Account   {
    * Get isactive
    * @return isactive
    **/
-  @ApiModelProperty(example = "true", required = true, value = "")
+  @ApiModelProperty(example = "0", required = true, value = "")
   @NotNull
 
-  public Long getUserId() {
+  public Long getUserid() {
     return userid;
   }
 

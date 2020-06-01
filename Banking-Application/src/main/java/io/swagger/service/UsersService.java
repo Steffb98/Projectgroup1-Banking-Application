@@ -20,9 +20,20 @@ public class UsersService {
         return (List<Users>) usersRepository.findAll();
     }
 
-    public void addUser(Users user) {
-        usersRepository.save(user);
-        System.out.println(user);
+    public Boolean addUser(Users user) {
+        Users userEmail = usersRepository.findByEmail(user.getEmail());
+        if (userEmail != null){
+            return false;
+        }
+        else{
+            user.setTypeofuser(Users.TypeofuserEnum.CUSTOMER);
+            usersRepository.save(user);
+            return true;
+        }
+    }
+
+    public Users GetUserByEmail(String email){
+        return usersRepository.findByEmail(email);
     }
 
     public Users getUserById(Long id)

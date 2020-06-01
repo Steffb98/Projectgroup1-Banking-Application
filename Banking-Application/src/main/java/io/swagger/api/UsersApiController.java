@@ -40,12 +40,17 @@ public class UsersApiController implements UsersApi {
         this.usersService = usersService;
     }
 
-    public ResponseEntity createUser(@ApiParam(value = "Created user object",required=true) @PathVariable("body") Users body
+    public ResponseEntity createUser(@ApiParam(value = "Created user object",required=true) @Valid @RequestBody Users body
 ) {
         String accept = request.getHeader("Accept");
         try {
-            usersService.addUser(body);
-            return ResponseEntity.status(HttpStatus.CREATED).body(body.getEmail());
+            Boolean emailAlreadyExists = usersService.addUser(body);
+            if(emailAlreadyExists == true) {
+                Users newUser = usersService.GetUserByEmail(body.getEmail());
+                return ResponseEntity.status(HttpStatus.CREATED).body(newUser);
+            }else{
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            }
         } catch (IllegalArgumentException iae) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
