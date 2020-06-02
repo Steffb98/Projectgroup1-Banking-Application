@@ -33,7 +33,7 @@ public interface TransactionApi {
         @ApiResponse(code = 400, message = "invalid input, object invalid"),
         @ApiResponse(code = 409, message = "an existing item already exists") })
     @RequestMapping(value = "/transaction",
-        consumes = { "application/json", "application/xml" },
+        consumes = { "application/json"},
         method = RequestMethod.POST)
     ResponseEntity<Void> addTransaction(@ApiParam(value = "Transaction object that needs to be added to the store" ,required=true )  @Valid @RequestBody Transaction body
 );
