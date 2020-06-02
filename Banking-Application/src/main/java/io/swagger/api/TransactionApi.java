@@ -33,7 +33,7 @@ public interface TransactionApi {
         @ApiResponse(code = 400, message = "invalid input, object invalid"),
         @ApiResponse(code = 409, message = "an existing item already exists") })
     @RequestMapping(value = "/transaction",
-        consumes = { "application/json", "application/xml" },
+        consumes = { "application/json"},
         method = RequestMethod.POST)
     ResponseEntity<Void> addTransaction(@ApiParam(value = "Transaction object that needs to be added to the store" ,required=true )  @Valid @RequestBody Transaction body
 );
@@ -57,7 +57,7 @@ public interface TransactionApi {
     @RequestMapping(value = "/transaction/{transactionId}",
         produces = { "application/json" }, 
         method = RequestMethod.GET)
-    ResponseEntity<List<Transaction>> getTransactionById(@ApiParam(value = "ID of transaction to return",required=true) @PathVariable("transactionId") Long transactionId
+    ResponseEntity<Transaction> getTransactionById(@ApiParam(value = "ID of transaction to return",required=true) @PathVariable("transactionId") Long transactionId
 );
 
 
@@ -66,10 +66,21 @@ public interface TransactionApi {
         @ApiResponse(code = 200, message = "search results matching criteria", response = Transaction.class, responseContainer = "List"),
         @ApiResponse(code = 400, message = "Bad input parameter"),
         @ApiResponse(code = 404, message = "User not found") })
-    @RequestMapping(value = "/transaction/{userId}",
+    @RequestMapping(value = "/transaction/user/{userId}",
         produces = { "application/json" }, 
         method = RequestMethod.GET)
-    ResponseEntity<List<Transaction>> getTransactionFromUser(@ApiParam(value = "ID of a user",required=true) @PathVariable("userId") Long userId
+    ResponseEntity<List<Transaction>> getTransactionFromUser(@ApiParam(value = "ID of an user",required=true) @PathVariable("userId") Long userId
 );
+
+    @ApiOperation(value = "Get transactions from an account", nickname = "getTransactionFromAccount", notes = "Returns transaction from a specific account", response = Transaction.class, responseContainer = "List", tags={ "transactions", })
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "search results matching criteria", response = Transaction.class, responseContainer = "List"),
+            @ApiResponse(code = 400, message = "Bad input parameter"),
+            @ApiResponse(code = 404, message = "Account not found") })
+    @RequestMapping(value = "/transaction/account/{accountId}",
+            produces = { "application/json" },
+            method = RequestMethod.GET)
+    ResponseEntity<List<Transaction>> getTransactionFromAcount(@ApiParam(value = "ID of an acount",required=true) @PathVariable("acountId") String acountId
+    );
 
 }

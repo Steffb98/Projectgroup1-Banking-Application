@@ -4,6 +4,7 @@ import io.swagger.dao.AccountRepository;
 import io.swagger.model.Account;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -25,7 +26,7 @@ public class AccountService {
     }
 
     public List<Account> getAccountsByUserId(Long userId) {
-        return null;
+        return (List<Account>) accountRepository.findAccountsByUserid(userId);
     }
 
     private boolean CheckIBAN(String iban){
@@ -35,5 +36,28 @@ public class AccountService {
         }catch(Exception io){
             return true;
         }
+    }
+
+    public Account getAccountsByIban(String iban) {
+        return accountRepository.findOne(iban);
+    }
+
+    public void ToggleActivity(String iban) {
+        try {
+            Account account = accountRepository.findOne(iban);
+            if (account.getIsactive() == true){
+                account.setIsactive(false);
+            }
+            else{
+                account.setIsactive(true);
+            }
+            accountRepository.save(account);
+        }catch(Exception io){
+
+        }
+    }
+
+    public void updateAmount(Account account){
+        accountRepository.save(account);
     }
 }
