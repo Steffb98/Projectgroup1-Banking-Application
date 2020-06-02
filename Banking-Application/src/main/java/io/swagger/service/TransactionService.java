@@ -18,16 +18,4 @@ public class TransactionService {
     public List<Transaction> getAllTransactions() {
         return (List<Transaction>) transactionRepository.findAll();
     }
-
-    public void addTransaction(Transaction transaction) {
-        transactionRepository.save(transaction);
-    }
-
-    public Transaction getTransactionById(Long id) {
-        return transactionRepository.findOne(id);
-    }
-
-    public List<Transaction> getAllTransactionsFromUser(Long userId) { return (List<Transaction>) transactionRepository.getAllByBy_IdOrderByDate(userId); }
-
-    public List<Transaction> getAllTransactionsFromAccount(String accountId) { return (List<Transaction>) transactionRepository.getTransactionsByAccount(accountId); }
 }

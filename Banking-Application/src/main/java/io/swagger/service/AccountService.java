@@ -25,7 +25,7 @@ public class AccountService {
     }
 
     public List<Account> getAccountsByUserId(Long userId) {
-        return (List<Account>) accountRepository.findAccountsByUserid(userId);
+        return null;
     }
 
     private boolean CheckIBAN(String iban){
@@ -34,25 +34,6 @@ public class AccountService {
             return false;
         }catch(Exception io){
             return true;
-        }
-    }
-
-    public Account getAccountsByIban(String iban) {
-        return accountRepository.findOne(iban);
-    }
-
-    public void ToggleActivity(String iban) {
-        try {
-            Account account = accountRepository.findOne(iban);
-            if (account.getIsactive() == true){
-                account.setIsactive(false);
-            }
-            else{
-                account.setIsactive(true);
-            }
-            accountRepository.save(account);
-        }catch(Exception io){
-
         }
     }
 }

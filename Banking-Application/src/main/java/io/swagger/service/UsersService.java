@@ -1,7 +1,6 @@
 package io.swagger.service;
 
 import io.swagger.dao.UsersRepository;
-import io.swagger.model.Account;
 import io.swagger.model.Users;
 import org.springframework.stereotype.Service;
 
@@ -20,20 +19,9 @@ public class UsersService {
         return (List<Users>) usersRepository.findAll();
     }
 
-    public Boolean addUser(Users user) {
-        Users userEmail = usersRepository.findByEmail(user.getEmail());
-        if (userEmail != null){
-            return false;
-        }
-        else{
-            user.setTypeofuser(Users.TypeofuserEnum.CUSTOMER);
-            usersRepository.save(user);
-            return true;
-        }
-    }
-
-    public Users GetUserByEmail(String email){
-        return usersRepository.findByEmail(email);
+    public void addUser(Users user) {
+        usersRepository.save(user);
+        System.out.println(user);
     }
 
     public Users getUserById(Long id)
@@ -43,19 +31,12 @@ public class UsersService {
 
     public void toggleUser(Long id)
     {
-        try {
-            Users u = usersRepository.findOne(id);
-            if(u.isIsactive() == false){
-                u.setIsactive(true);
-            }
-            else{
-                u.setIsactive(false);
-            }
-            usersRepository.save(u);
-        }catch(Exception io){
-
+        Users u = usersRepository.findOne(id);
+        if(u.isIsactive() == false){
+            u.setIsactive(true);
+        }else{
+            u.setIsactive(false);
         }
-
     }
 
     public void updateUser(Long id, String email, String password)
@@ -70,9 +51,5 @@ public class UsersService {
 
         return usersRepository.findUserByEmailAndPassword(email,password);
 
-    }
-
-    public List<Users> getUserByName(String name){
-        return (List<Users>) usersRepository.GetUserByName(name);
     }
 }
