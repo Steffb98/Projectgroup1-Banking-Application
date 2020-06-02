@@ -4,10 +4,13 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import jdk.jfr.Enabled;
 import org.springframework.validation.annotation.Validated;
 
 import javax.persistence.*;
+import javax.validation.Valid;
 import javax.validation.constraints.*;
 
 /**
@@ -41,14 +44,6 @@ public class Users {
 
   @JsonProperty("typeofuser")
   private Users.TypeofuserEnum typeofuser = null;
-
-  public TypeofuserEnum getTypeofuser() {
-    return typeofuser;
-  }
-
-  public void setTypeofuser(TypeofuserEnum typeofuser) {
-    this.typeofuser = typeofuser;
-  }
 
   public enum TypeofuserEnum {
     EMPLOYEE("employee"),
@@ -85,7 +80,7 @@ public class Users {
     this.email = email;
     this.password = password;
     this.isactive = isactive;
-    this.setTypeofuser(typeofuser);
+    this.typeofuser = typeofuser;
   }
 
   public Users() {
@@ -227,12 +222,12 @@ public class Users {
         Objects.equals(this.email, users.email) &&
         Objects.equals(this.password, users.password) &&
         Objects.equals(this.isactive, users.isactive) &&
-         Objects.equals(this.getTypeofuser(), users.getTypeofuser());
+         Objects.equals(this.typeofuser, users.typeofuser);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, firstname, lastname, email, password, isactive, getTypeofuser());
+    return Objects.hash(id, firstname, lastname, email, password, isactive, typeofuser);
   }
 
   @Override
@@ -246,7 +241,7 @@ public class Users {
     sb.append("    email: ").append(toIndentedString(email)).append("\n");
     sb.append("    password: ").append(toIndentedString(password)).append("\n");
     sb.append("    isactive: ").append(toIndentedString(isactive)).append("\n");
-    sb.append("    typeofuser: ").append(toIndentedString(getTypeofuser())).append("\n");
+    sb.append("    typeofuser: ").append(toIndentedString(typeofuser)).append("\n");
     sb.append("}");
     return sb.toString();
   }

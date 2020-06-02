@@ -9,7 +9,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -19,9 +18,7 @@ import javax.validation.Valid;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
-@CrossOrigin(origins = {"http://localhost"})
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2020-05-21T13:09:59.263Z[GMT]")
-
 @Controller
 public class UsersApiController implements UsersApi {
 
@@ -40,17 +37,12 @@ public class UsersApiController implements UsersApi {
         this.usersService = usersService;
     }
 
-    public ResponseEntity createUser(@ApiParam(value = "Created user object",required=true) @Valid @RequestBody Users body
+    public ResponseEntity createUser(@ApiParam(value = "Created user object",required=true) @PathVariable("body") Users body
 ) {
         String accept = request.getHeader("Accept");
         try {
-            Boolean emailAlreadyExists = usersService.addUser(body);
-            if(emailAlreadyExists == true) {
-                Users newUser = usersService.GetUserByEmail(body.getEmail());
-                return ResponseEntity.status(HttpStatus.CREATED).body(newUser);
-            }else{
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-            }
+            usersService.addUser(body);
+            return ResponseEntity.status(HttpStatus.CREATED).body(body.getEmail());
         } catch (IllegalArgumentException iae) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
@@ -72,7 +64,7 @@ public class UsersApiController implements UsersApi {
                 return ResponseEntity.status(400).build();
             }else{
                 usersService.toggleUser(id);
-                return ResponseEntity.status(HttpStatus.OK).body(usersService.getUserById(id));
+                return ResponseEntity.status(HttpStatus.OK).body(usersService.getAllUsers());
             }
         } catch (IllegalArgumentException iae) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
@@ -89,7 +81,7 @@ public class UsersApiController implements UsersApi {
                 usersService.updateUser(id, email, password);
                 return ResponseEntity.status(HttpStatus.OK).body(usersService.getAllUsers());
             } catch (IllegalArgumentException iae) {
-                return ResponseEntity.status(400).build();
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
             }
         }
         return new ResponseEntity<Users>(HttpStatus.NOT_IMPLEMENTED);
@@ -114,26 +106,5 @@ public class UsersApiController implements UsersApi {
         }
         return new ResponseEntity<Users>(HttpStatus.NOT_IMPLEMENTED);
     }
-
-    public ResponseEntity<List<Users>> getUserByName(@NotNull @ApiParam(value = "Search by name", required = true)@Valid @RequestParam(value = "name", required = true) String name
-    ) {
-        String accept = request.getHeader("Accept");
-        if (accept != null && accept.contains("application/json")) {
-            try {
-
-                if(usersService.getUserByName(name).isEmpty()){
-                    return ResponseEntity.status(404).build();
-                }else{
-                    return ResponseEntity.status(200).body(usersService.getUserByName(name));
-                }
-            } catch (IllegalArgumentException iae) {
-
-                log.error("The name is not valid", iae);
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-            }
-        }
-        return new ResponseEntity(HttpStatus.NOT_IMPLEMENTED);
-    }
-
 
 }

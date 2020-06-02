@@ -179,7 +179,7 @@ public class Account   {
   @ApiModelProperty(example = "true", required = true, value = "")
       @NotNull
 
-    public Boolean getIsactive() {
+    public Boolean isIsactive() {
     return isactive;
   }
 
@@ -187,7 +187,7 @@ public class Account   {
     this.isactive = isactive;
   }
 
-  public Account userid(Long userid) {
+  public Account userId(Long userid) {
     this.userid = userid;
     return this;
   }
@@ -196,10 +196,10 @@ public class Account   {
    * Get isactive
    * @return isactive
    **/
-  @ApiModelProperty(example = "0", required = true, value = "")
+  @ApiModelProperty(example = "true", required = true, value = "")
   @NotNull
 
-  public Long getUserid() {
+  public Long userId() {
     return userid;
   }
 
@@ -263,7 +263,7 @@ public class Account   {
       int n = rand.nextInt(10) + 0;
       IBAN += Integer.toString(n);
     }
-    IBAN += " INHO";
+    IBAN += " BLUE";
     for (int i = 0; i < 13; i++) {
       if (i % 5 == 0) {
         IBAN += " ";
@@ -274,6 +274,4 @@ public class Account   {
     }
     return IBAN;
   }
-
-
 }

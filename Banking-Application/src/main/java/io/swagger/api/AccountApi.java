@@ -31,22 +31,10 @@ public interface AccountApi {
     @ApiResponses(value = { 
         @ApiResponse(code = 405, message = "Invalid input") })
     @RequestMapping(value = "/account",
-        consumes = { "application/json" },
+        consumes = { "application/json", "application/xml" },
         method = RequestMethod.POST)
     ResponseEntity<Void> createAcc(@ApiParam(value = "Account object that needs to be added to the store" ,required=true )  @Valid @RequestBody Account body
-    );
-
-    @ApiOperation(value = "get account by Iban", nickname = "getAccountByIban", notes = "Calling this method will retrieve an account with the provided iban", response = Account.class, tags={ "accounts", })
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "search results matching criteria", response = Account.class, responseContainer = "List"),
-            @ApiResponse(code = 400, message = "bad input parameter"),
-            @ApiResponse(code = 403, message = "forbidden"),
-            @ApiResponse(code = 404, message = "accounts not found") })
-    @RequestMapping(value = "/account/{accountId}",
-            produces = { "application/json" },
-            method = RequestMethod.GET)
-    ResponseEntity<Account> getAccountByIban(@NotNull @ApiParam(value = "Account of iban to show", required = true) @Valid @RequestParam(value = "iban", required = true) String iban
-    );
+);
 
     @ApiOperation(value = "get account by userid", nickname = "getAccountByUserID", notes = "Calling this method will retrieve accounts based on the userID", response = Account.class, responseContainer = "List", tags={ "accounts", })
     @ApiResponses(value = {
@@ -57,7 +45,7 @@ public interface AccountApi {
     @RequestMapping(value = "/account/listaccount",
             produces = { "application/json" },
             method = RequestMethod.GET)
-    ResponseEntity<List<Account>> getAccountByUserID(@NotNull @ApiParam(value = "Accounts of user to show", required = true) @Valid @RequestParam(value = "userId", required = true) Long userId
+    ResponseEntity<List<Account>> getAccountByUserID(@NotNull @ApiParam(value = "Account of user to show", required = true) @Valid @RequestParam(value = "userId", required = true) Long userId
     );
 
 
