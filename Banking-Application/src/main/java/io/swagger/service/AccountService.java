@@ -4,6 +4,7 @@ import io.swagger.dao.AccountRepository;
 import io.swagger.model.Account;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -54,5 +55,9 @@ public class AccountService {
         }catch(Exception io){
 
         }
+    }
+
+    public void updateAmount(Account account){
+        accountRepository.save(account);
     }
 }

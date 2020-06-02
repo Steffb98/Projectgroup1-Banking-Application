@@ -14,6 +14,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.BiFunction;
 
 @Component
 public class MyApplicationRunner implements ApplicationRunner {
@@ -37,14 +38,17 @@ public class MyApplicationRunner implements ApplicationRunner {
                 new Users("Bobby", "McBobface", "bobbyface@gmail.com", "Sterk!", true, Users.TypeofuserEnum.CUSTOMER)
         );
 
-        Account account = new Account(Account.TypeofaccountEnum.SAVING, new BigDecimal(-10.00), true,50L);
-        Account account2 = new Account(Account.TypeofaccountEnum.DEPOSIT, new BigDecimal(-10.00), true,50L);
+        Account account = new Account(Account.TypeofaccountEnum.SAVING, new BigDecimal(-10.00), true,51L);
+        Account account2 = new Account(Account.TypeofaccountEnum.DEPOSIT, new BigDecimal(-10.00), true,51L);
         List<Account> accounts = Arrays.asList(account, account2);
 
         List<Transaction> transactions = Arrays.asList(
                 new Transaction(account, account2, new BigDecimal(10.00), users.get(0)),
                 new Transaction(account2, account, new BigDecimal(20.00), users.get(1))
         );
+
+        account.setBalance(new BigDecimal(300000));
+        account2.setBalance(new BigDecimal(300000));
 
         users.forEach(usersRepository::save);
         accounts.forEach(accountRepository::save);
