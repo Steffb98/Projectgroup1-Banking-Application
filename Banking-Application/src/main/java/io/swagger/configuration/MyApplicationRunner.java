@@ -35,19 +35,23 @@ public class MyApplicationRunner implements ApplicationRunner {
         List<Users> users = Arrays.asList(
                 new Users("Hayo", "Bos", "663143@student.inholland.nl", "wachtwoord", true, Users.TypeofuserEnum.EMPLOYEE),
                 new Users("Hayo", "Bos", "1", "1", true, Users.TypeofuserEnum.EMPLOYEE),
-                new Users("Bobby", "McBobface", "bobbyface@gmail.com", "Sterk!", true, Users.TypeofuserEnum.CUSTOMER)
+                new Users("Bobby", "McBobface", "bobbyface@gmail.com", "Sterk!", true, Users.TypeofuserEnum.CUSTOMER),
+                new Users("Ba", "nq", "banq@inholland.nl", "Hfsuaidhfidou", false, Users.TypeofuserEnum.EMPLOYEE)
         );
+        users.get(3).setId(0L);
 
         Account account = new Account(Account.TypeofaccountEnum.SAVING, new BigDecimal(-10.00), true,51L);
         Account account2 = new Account(Account.TypeofaccountEnum.DEPOSIT, new BigDecimal(-10.00), true,51L);
-        List<Account> accounts = Arrays.asList(account, account2);
+        Account bankAccount = new Account(Account.TypeofaccountEnum.SAVING, new BigDecimal(00.00), true, 53L);
+        bankAccount.setIban("NL01 INHO 0000 0000 01");
+        List<Account> accounts = Arrays.asList(account, account2, bankAccount);
 
         List<Transaction> transactions = Arrays.asList(
                 new Transaction(account, account2, new BigDecimal(10.00), users.get(0)),
                 new Transaction(account2, account, new BigDecimal(20.00), users.get(1))
         );
 
-        account.setBalance(new BigDecimal(300000));
+        account.setBalance(new BigDecimal(30));
         account2.setBalance(new BigDecimal(300000));
 
         users.forEach(usersRepository::save);
