@@ -14,6 +14,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.BiFunction;
 
 @Component
 public class MyApplicationRunner implements ApplicationRunner {
@@ -33,18 +34,34 @@ public class MyApplicationRunner implements ApplicationRunner {
 
         List<Users> users = Arrays.asList(
                 new Users("Hayo", "Bos", "663143@student.inholland.nl", "wachtwoord", true, Users.TypeofuserEnum.EMPLOYEE),
-                new Users("Hayo", "Bos", "1", "1", true, Users.TypeofuserEnum.EMPLOYEE),
-                new Users("Bobby", "McBobface", "bobbyface@gmail.com", "Sterk!", true, Users.TypeofuserEnum.CUSTOMER)
+                new Users("Test", "Employee", "1", "1", true, Users.TypeofuserEnum.EMPLOYEE),
+                new Users("Bobby", "McBobface", "bobbyface@gmail.com", "Sterk!", true, Users.TypeofuserEnum.CUSTOMER),
+                new Users("Ba", "nq", "banq@inholland.nl", "Hfsuaidhfidou", false, Users.TypeofuserEnum.EMPLOYEE)
         );
 
-        Account account = new Account(Account.TypeofaccountEnum.SAVING, new BigDecimal(-10.00), true,1L);
-        Account account2 = new Account(Account.TypeofaccountEnum.DEPOSIT, new BigDecimal(-10.00), true,2L);
-        List<Account> accounts = Arrays.asList(account, account2);
+        Account accountTestSaving = new Account(Account.TypeofaccountEnum.SAVING, new BigDecimal(-10.00), true,51L);
+        Account accountTestDeposit = new Account(Account.TypeofaccountEnum.DEPOSIT, new BigDecimal(-10.00), true,51L);
+        Account accountHayoSaving = new Account(Account.TypeofaccountEnum.SAVING, new BigDecimal(-10.00), true,50L);
+        Account accountHayoDeposit = new Account(Account.TypeofaccountEnum.DEPOSIT, new BigDecimal(-10.00), true,50L);
+        Account accountBobbySaving = new Account(Account.TypeofaccountEnum.SAVING, new BigDecimal(-10.00), true,52L);
+        Account accountBobbyDeposit = new Account(Account.TypeofaccountEnum.DEPOSIT, new BigDecimal(-10.00), true,52L);
+
+        Account bankAccount = new Account(Account.TypeofaccountEnum.SAVING, new BigDecimal(00.00), true, 53L);
+        bankAccount.setIban("NL01 INHO 0000 0000 01");
+        List<Account> accounts = Arrays.asList(accountTestSaving, accountTestDeposit, accountHayoSaving, accountHayoDeposit, accountBobbySaving, accountBobbyDeposit,bankAccount);
 
         List<Transaction> transactions = Arrays.asList(
-                new Transaction(account, account2, new BigDecimal(10.00), users.get(0)),
-                new Transaction(account2, account, new BigDecimal(20.00), users.get(1))
+                new Transaction(accountTestSaving, accountTestDeposit, new BigDecimal(10.00), users.get(0)),
+                new Transaction(accountTestDeposit, accountTestSaving, new BigDecimal(20.00), users.get(1))
         );
+
+        accountTestSaving.setBalance(new BigDecimal(30));
+        accountTestDeposit.setBalance(new BigDecimal(300000));
+        accountHayoSaving.setBalance(new BigDecimal(33));
+        accountHayoDeposit.setBalance(new BigDecimal(85));
+        accountBobbySaving.setBalance(new BigDecimal(124));
+        accountBobbyDeposit.setBalance(new BigDecimal(750.73));
+
 
         users.forEach(usersRepository::save);
         accounts.forEach(accountRepository::save);
@@ -54,10 +71,5 @@ public class MyApplicationRunner implements ApplicationRunner {
         usersRepository.findAll().forEach(System.out::println);
         transactionRepository.findAll().forEach(System.out::println);
 
-        System.out.println("----------------");
-        System.out.println(usersRepository.getAllByFirstname("Hayo"));
-
-
-        //System.out.println(accountRepository);
     }
 }

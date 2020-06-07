@@ -3,6 +3,7 @@ package io.swagger.service;
 import io.swagger.dao.TransactionRepository;
 import io.swagger.model.Transaction;
 import org.springframework.stereotype.Service;
+import org.threeten.bp.OffsetDateTime;
 
 import java.util.List;
 
@@ -20,6 +21,7 @@ public class TransactionService {
     }
 
     public void addTransaction(Transaction transaction) {
+        transaction.setDate(OffsetDateTime.now());
         transactionRepository.save(transaction);
     }
 
