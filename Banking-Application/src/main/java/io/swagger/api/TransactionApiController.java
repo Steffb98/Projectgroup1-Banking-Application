@@ -3,6 +3,7 @@ package io.swagger.api;
 import io.swagger.model.Transaction;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.*;
+import io.swagger.service.AccountService;
 import io.swagger.service.TransactionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +17,7 @@ import javax.validation.constraints.*;
 import javax.validation.Valid;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2020-05-21T13:09:59.263Z[GMT]")
@@ -31,11 +33,14 @@ public class TransactionApiController implements TransactionApi {
 
     private TransactionService transactionService;
 
+    private AccountService accountService;
+
     @org.springframework.beans.factory.annotation.Autowired
-    public TransactionApiController(ObjectMapper objectMapper, HttpServletRequest request, TransactionService transactionService) {
+    public TransactionApiController(ObjectMapper objectMapper, HttpServletRequest request, TransactionService transactionService, AccountService accountService) {
         this.objectMapper = objectMapper;
         this.request = request;
         this.transactionService = transactionService;
+        this.accountService = accountService;
     }
 
     public ResponseEntity addTransaction(@ApiParam(value = "Transaction object that needs to be added to the store" ,required=true )  @Valid @RequestBody Transaction body
@@ -43,6 +48,10 @@ public class TransactionApiController implements TransactionApi {
         String accept = request.getHeader("Accept");
         try {
             transactionService.addTransaction(body);
+            body.getSender().setBalance(body.getSender().getBalance().subtract(body.getAmount()));
+            body.getReceiver().setBalance(body.getReceiver().getBalance().add(body.getAmount()));
+            accountService.updateAmount(body.getSender());
+            accountService.updateAmount(body.getReceiver());
             return  ResponseEntity.status(HttpStatus.OK).body(body);
         } catch (IllegalArgumentException iae) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
