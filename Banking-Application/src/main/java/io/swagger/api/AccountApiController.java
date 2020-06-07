@@ -67,8 +67,9 @@ public class AccountApiController implements AccountApi {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(accountService.getAccountsByIban(iban));
             }
         }
-        //TODO: verwijderen???
-        return new ResponseEntity<Account>(HttpStatus.I_AM_A_TEAPOT);
+        else{
+            return new ResponseEntity<Account>(HttpStatus.FORBIDDEN);
+        }
     }
 
     public ResponseEntity<List<Account>> getAccountByUserID(@NotNull @ApiParam(value = "Account of user to show", required = true) @Valid @RequestParam(value = "userId", required = true) Long userId
@@ -81,8 +82,10 @@ public class AccountApiController implements AccountApi {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
             }
         }
-        //TODO: verwijderen???
-        return new ResponseEntity<List<Account>>(HttpStatus.NOT_IMPLEMENTED);
+
+        else{
+            return new ResponseEntity<List<Account>>(HttpStatus.FORBIDDEN);
+        }
     }
 
     public ResponseEntity toggleStatusAcc(@ApiParam(value = "AccountID to set to active or inactive",required=true) @PathVariable("accountId") String iban
@@ -102,7 +105,7 @@ public class AccountApiController implements AccountApi {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(accountService.getAccountsByIban(iban));
             }
         } catch (IllegalArgumentException iae) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).build();
         }
     }
 
