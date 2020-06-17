@@ -44,12 +44,12 @@ public class UsersApiController implements UsersApi {
 ) {
         String accept = request.getHeader("Accept");
         try {
-            Boolean emailAlreadyExists = usersService.addUser(body);
-            if(emailAlreadyExists == true) {
-                Users newUser = usersService.GetUserByEmail(body.getEmail());
-                return ResponseEntity.status(HttpStatus.CREATED).body(newUser);
+            Boolean checkIfEmailExist = usersService.checkIfEmailExist(body);
+            if(checkIfEmailExist == true) {
+                usersService.addUser(body);
+                return ResponseEntity.status(HttpStatus.CREATED).build();
             }else{
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+                return ResponseEntity.status(401).build();
             }
         } catch (IllegalArgumentException iae) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
@@ -71,7 +71,7 @@ public class UsersApiController implements UsersApi {
             if(usersService.getUserById(id) == null){
                 return ResponseEntity.status(400).build();
             }else{
-                usersService.toggleUser(id);
+                usersService.switchUserStatus(id);
                 return ResponseEntity.status(HttpStatus.OK).body(usersService.getUserById(id));
             }
         } catch (IllegalArgumentException iae) {
@@ -107,7 +107,6 @@ public class UsersApiController implements UsersApi {
                 }
 
             } catch (IllegalArgumentException iae) {
-
                 log.error("The id is not valid", iae);
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
             }
@@ -120,14 +119,12 @@ public class UsersApiController implements UsersApi {
         String accept = request.getHeader("Accept");
         if (accept != null && accept.contains("application/json")) {
             try {
-
                 if(usersService.getUserByName(name).isEmpty()){
                     return ResponseEntity.status(404).build();
                 }else{
-                    return ResponseEntity.status(200).body(usersService.getUserByName(name));
+                    return ResponseEntity.status(200).build();
                 }
             } catch (IllegalArgumentException iae) {
-
                 log.error("The name is not valid", iae);
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
             }

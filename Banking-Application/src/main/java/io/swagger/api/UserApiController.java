@@ -43,7 +43,6 @@ public class UserApiController implements UserApi {
 ,@NotNull @ApiParam(value = "The password for login in clear text", required = true) @Valid @RequestParam(value = "password", required = true) String password
 ) {
         String accept = request.getHeader("Accept");
-        System.out.println(password);
         try {
             Users user= usersService.login(email, password);
             if(user == null){
