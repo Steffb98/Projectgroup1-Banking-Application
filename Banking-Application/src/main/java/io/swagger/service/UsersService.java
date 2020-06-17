@@ -20,18 +20,18 @@ public class UsersService {
         return (List<Users>) usersRepository.findAll();
     }
 
-    public Boolean addUser(Users user) {
+    public void addUser(Users user) {
+        user.setTypeofuser(Users.TypeofuserEnum.CUSTOMER);
+        usersRepository.save(user);
+    }
+    public boolean checkIfEmailExist(Users user){
         Users userEmail = usersRepository.findByEmail(user.getEmail());
-        if (userEmail != null){
+        if(userEmail != null){
             return false;
-        }
-        else{
-            user.setTypeofuser(Users.TypeofuserEnum.CUSTOMER);
-            usersRepository.save(user);
+        }else{
             return true;
         }
     }
-
     public Users GetUserByEmail(String email){
         return usersRepository.findByEmail(email);
     }
@@ -41,21 +41,16 @@ public class UsersService {
         return usersRepository.findOne(id);
     }
 
-    public void toggleUser(Long id)
+    public void switchUserStatus(Long id)
     {
-        try {
-            Users u = usersRepository.findOne(id);
-            if(u.isIsactive() == false){
-                u.setIsactive(true);
-            }
-            else{
-                u.setIsactive(false);
-            }
-            usersRepository.save(u);
-        }catch(Exception io){
-
+        Users u = usersRepository.findOne(id);
+        if(u.isIsactive() == false){
+            u.setIsactive(true);
         }
-
+        else{
+            u.setIsactive(false);
+        }
+        usersRepository.save(u);
     }
 
     public void updateUser(Long id, String email, String password)
@@ -67,9 +62,7 @@ public class UsersService {
     }
 
     public Users login(String email, String password){
-
         return usersRepository.findUserByEmailAndPassword(email,password);
-
     }
 
     public List<Users> getUserByName(String name){
