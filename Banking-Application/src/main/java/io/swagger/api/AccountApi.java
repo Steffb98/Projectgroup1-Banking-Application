@@ -28,8 +28,10 @@ import java.util.Map;
 public interface AccountApi {
 
     @ApiOperation(value = "Creates an account for a user", nickname = "createAcc", notes = "", tags={ "accounts", })
-    @ApiResponses(value = { 
-        @ApiResponse(code = 405, message = "Invalid input") })
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "Account succesfully created"),
+        @ApiResponse(code = 405, message = "Invalid input"),
+        @ApiResponse(code = 409, message = "Account already exist") })
     @RequestMapping(value = "/account",
         consumes = { "application/json" },
         method = RequestMethod.POST)
@@ -61,13 +63,15 @@ public interface AccountApi {
     );
 
 
-    @ApiOperation(value = "Changes account to inactive/active", nickname = "toggleStatusAcc", notes = "", tags={ "accounts", })
-    @ApiResponses(value = { 
+    @ApiOperation(value = "Changes account to inactive/active", nickname = "toggleActivityAcc", notes = "", tags={ "accounts", })
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "Activity of account succesfully changed"),
         @ApiResponse(code = 400, message = "Invalid ID supplied"),
         @ApiResponse(code = 404, message = "Account not found") })
     @RequestMapping(value = "/account/{accountId}",
+        produces = { "application/json" },
         method = RequestMethod.PUT)
-    ResponseEntity<Void> toggleStatusAcc(@ApiParam(value = "AccountID to set to active or inactive",required=true) @PathVariable("accountId") String accountId
-);
+    ResponseEntity<Void> toggleActivityAcc(@ApiParam(value = "AccountID to set to active or inactive",required=true) @PathVariable("accountId") String accountId
+); // CHECK IF NAME CHANGE WORKS
 
 }
