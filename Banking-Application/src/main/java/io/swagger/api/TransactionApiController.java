@@ -47,12 +47,16 @@ public class TransactionApiController implements TransactionApi {
 ) {
         String accept = request.getHeader("Accept");
         try {
-            transactionService.addTransaction(body);
-            body.getSender().setBalance(body.getSender().getBalance().subtract(body.getAmount()));
-            body.getReceiver().setBalance(body.getReceiver().getBalance().add(body.getAmount()));
-            accountService.updateAmount(body.getSender());
-            accountService.updateAmount(body.getReceiver());
-            return  ResponseEntity.status(HttpStatus.OK).body(body);
+            if(body.getSender().getBalance().subtract(body.getAmount()).compareTo(body.getSender().getMinimumbalance()) == 0){
+                body.getSender().setBalance(body.getSender().getBalance().subtract(body.getAmount()));
+                body.getReceiver().setBalance(body.getReceiver().getBalance().add(body.getAmount()));
+                accountService.updateAmount(body.getSender());
+                accountService.updateAmount(body.getReceiver());
+                transactionService.addTransaction(body);
+                return  ResponseEntity.status(HttpStatus.OK).body(body);
+            } else {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            }
         } catch (IllegalArgumentException iae) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
