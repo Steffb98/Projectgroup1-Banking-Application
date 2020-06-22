@@ -110,6 +110,12 @@
                 403: function(error){
                     alert("There is not enough money on the bank account");
                 },
+                400: function(error){
+                    alert("Not a valid amount \nPlease choose an amount between 0 and 20000")
+                },
+                406: function(error){
+                    alert("You are at your day limit")
+                },
                 error: function(error){
                     alert("invalid data");
                 }

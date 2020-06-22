@@ -74,10 +74,10 @@ public class Account   {
   private Long userid = null;
 
   @JsonProperty("daylimit")
-  private BigDecimal dayLimit = null;
+  private Integer dayLimit = null;
 
-  @JsonProperty("weeklimit")
-  private BigDecimal weekLimit = null;
+  @JsonProperty("transactionlimit")
+  private BigDecimal transactionLimit = null;
 
   public Account(TypeofaccountEnum typeofaccount, BigDecimal minimumbalance, Boolean isactive, Long userid) {
     this.iban = GenerateIBAN();
@@ -86,8 +86,8 @@ public class Account   {
     this.minimumbalance = minimumbalance;
     this.isactive = isactive;
     this.userid = userid;
-    this.dayLimit = new BigDecimal(200.00);
-    this.weekLimit = new BigDecimal(10000.00);
+    this.dayLimit = 5;
+    this.transactionLimit = new BigDecimal(20000);
   }
 
   public Account() {
@@ -215,20 +215,20 @@ public class Account   {
     this.userid = userid;
   }
 
-  public BigDecimal getDayLimit() {
+  public Integer getDayLimit() {
     return dayLimit;
   }
 
-  public void setDayLimit(BigDecimal dayLimit) {
+  public void setDayLimit(Integer dayLimit) {
     this.dayLimit = dayLimit;
   }
 
-  public BigDecimal getWeekLimit() {
-    return weekLimit;
+  public BigDecimal getTransactionLimit() {
+    return transactionLimit;
   }
 
-  public void setWeekLimit(BigDecimal weekLimit) {
-    this.weekLimit = weekLimit;
+  public void setTransactionLimit(BigDecimal transactionLimit) {
+    this.transactionLimit = transactionLimit;
   }
 
   @Override
