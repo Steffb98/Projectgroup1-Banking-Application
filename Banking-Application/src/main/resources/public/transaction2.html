@@ -107,6 +107,9 @@
                 success:function(response){
                     window.location = "home.html";
                 },
+                403: function(error){
+                    alert("There is not enough money on the bank account");
+                },
                 error: function(error){
                     alert("invalid data");
                 }
