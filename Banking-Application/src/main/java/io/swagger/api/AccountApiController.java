@@ -49,22 +49,25 @@ public class AccountApiController implements AccountApi {
         }
     }
 
-    //TODO: Make simpler method, Duplicate code met togglestatus?
     public ResponseEntity<Account> getAccountByIban(@NotNull @ApiParam(value = "Account of iban to show", required = true) @Valid @RequestParam(value = "iban", required = true) String iban
     ) {
         String accept = request.getHeader("Accept");
         if (accept != null && accept.contains("application/json")) {
             if (iban.length() == 22) {
-                Account acc = accountService.getAccountsByIban(iban);
-                if (acc != null){
-                    return ResponseEntity.status(HttpStatus.OK).body(acc);
-                }
-                else{
-                    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(acc);
+                Account acc = accountService.getAccountByIban(iban);
+                try{
+                    if (acc == null){
+                        throw new IllegalArgumentException();
+                    }
+                    else{
+                        return ResponseEntity.status(HttpStatus.OK).body(acc);
+                    }
+                } catch(IllegalArgumentException iae){
+                    return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
                 }
             }
             else{
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(accountService.getAccountsByIban(iban));
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
             }
         }
         else{
@@ -82,30 +85,34 @@ public class AccountApiController implements AccountApi {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
             }
         }
-
         else{
             return new ResponseEntity<List<Account>>(HttpStatus.FORBIDDEN);
         }
     }
 
-    public ResponseEntity toggleStatusAcc(@ApiParam(value = "AccountID to set to active or inactive",required=true) @PathVariable("accountId") String iban
+    public ResponseEntity toggleActivityAcc(@ApiParam(value = "AccountID to set to active or inactive",required=true) @PathVariable("accountId") String iban
 )   {
         String accept = request.getHeader("Accept");
-        try {
+        if (accept != null && accept.contains("application/json")) {
             if (iban.length() == 22) {
-                Account acc = accountService.getAccountsByIban(iban);
-                if (acc != null) {
-                    accountService.ToggleActivity(iban);
-                    return ResponseEntity.status(HttpStatus.OK).body(iban);
-                }
-                else{
-                    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(acc);
+                try{
+                    Account acc = accountService.getAccountByIban(iban);
+                    if (acc == null){
+                        throw new IllegalArgumentException();
+                    }
+                    else{
+                        accountService.ToggleAccountActivity(iban);
+                        return ResponseEntity.status(HttpStatus.OK).build();
+                    }
+                } catch(IllegalArgumentException iae){
+                    return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
                 }
             }else{
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(accountService.getAccountsByIban(iban));
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
             }
-        } catch (IllegalArgumentException iae) {
-            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).build();
+        }
+        else{
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
     }
 

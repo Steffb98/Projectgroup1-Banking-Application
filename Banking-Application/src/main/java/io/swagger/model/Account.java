@@ -73,6 +73,12 @@ public class Account   {
   @JsonProperty("userid")
   private Long userid = null;
 
+  @JsonProperty("daylimit")
+  private Integer dayLimit = null;
+
+  @JsonProperty("transactionlimit")
+  private BigDecimal transactionLimit = null;
+
   public Account(TypeofaccountEnum typeofaccount, BigDecimal minimumbalance, Boolean isactive, Long userid) {
     this.iban = GenerateIBAN();
     this.balance = new BigDecimal(0.00);
@@ -80,6 +86,8 @@ public class Account   {
     this.minimumbalance = minimumbalance;
     this.isactive = isactive;
     this.userid = userid;
+    this.dayLimit = 5;
+    this.transactionLimit = new BigDecimal(20000);
   }
 
   public Account() {
@@ -207,6 +215,21 @@ public class Account   {
     this.userid = userid;
   }
 
+  public Integer getDayLimit() {
+    return dayLimit;
+  }
+
+  public void setDayLimit(Integer dayLimit) {
+    this.dayLimit = dayLimit;
+  }
+
+  public BigDecimal getTransactionLimit() {
+    return transactionLimit;
+  }
+
+  public void setTransactionLimit(BigDecimal transactionLimit) {
+    this.transactionLimit = transactionLimit;
+  }
 
   @Override
   public boolean equals(java.lang.Object o) {
