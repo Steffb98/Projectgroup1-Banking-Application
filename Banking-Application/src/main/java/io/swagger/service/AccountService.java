@@ -11,7 +11,7 @@ import java.util.NoSuchElementException;
 @Service
 public class AccountService {
 
-    private AccountRepository accountRepository;
+    private final AccountRepository accountRepository;
 
     public AccountService(AccountRepository accountRepository) {
         this.accountRepository = accountRepository;
@@ -27,7 +27,7 @@ public class AccountService {
     }
 
     public List<Account> getAccountsByUserId(Long userId) {
-        return (List<Account>) accountRepository.findAccountsByUserid(userId);
+        return accountRepository.findAccountsByUserid(userId);
     }
 
     private boolean CheckIBANAvailability(String iban){
@@ -45,16 +45,11 @@ public class AccountService {
 
     public void ToggleAccountActivity(String iban) {
         Account account = accountRepository.findOne(iban);
-        if (account.getIsactive() == true){
-            account.setIsactive(false);
-        }
-        else{
-            account.setIsactive(true);
-        }
+        account.setIsactive(account.getIsactive() != true);
         accountRepository.save(account);
     }
 
-    public void updateAmount(Account account){
+    public void updateAccount(Account account){
         accountRepository.save(account);
     }
 }

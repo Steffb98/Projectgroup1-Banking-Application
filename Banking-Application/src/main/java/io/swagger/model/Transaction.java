@@ -136,7 +136,7 @@ public class Transaction   {
   public void setAmount(BigDecimal amount) {
 
     if (amount.intValue() < 0){
-      throw new IllegalArgumentException("Amount should not be less than 0");
+      throw new IllegalArgumentException("Amount cannot be below zero");
     }
     this.amount = amount;
   }

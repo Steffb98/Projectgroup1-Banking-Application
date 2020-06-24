@@ -5,7 +5,6 @@ import io.swagger.model.Account;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import java.math.BigDecimal;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -13,7 +12,7 @@ import java.util.logging.Logger;
 public class ScheduledTasks {
 
     private static final Logger logger = Logger.getLogger(ScheduledTasks.class.getName());
-    private AccountRepository accountRepository;
+    private final AccountRepository accountRepository;
 
     public ScheduledTasks(AccountRepository accountRepository) {
         this.accountRepository = accountRepository;
@@ -21,9 +20,9 @@ public class ScheduledTasks {
 
     @Scheduled(cron = "0 1 * * * ?")
     public void resetAccountDayLimit(){
-        logger.log(Level.INFO,"Resetting day limit.");
+        logger.log(Level.INFO,"Resetting day limit...");
         for (Account account : accountRepository.findAll()){
-            account.setDayLimit(0);
+            account.setNumberOfTransaction(0);
         }
     }
 }
