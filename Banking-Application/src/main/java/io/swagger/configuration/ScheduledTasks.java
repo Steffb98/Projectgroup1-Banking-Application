@@ -23,18 +23,7 @@ public class ScheduledTasks {
     public void resetAccountDayLimit(){
         logger.log(Level.INFO,"Resetting day limit.");
         for (Account account : accountRepository.findAll()){
-            account.setDayLimit(new BigDecimal(0));
-        }
-        
-    }
-
-    @Scheduled(cron = "0 0 * * 0 ?")
-    public void resetAccountWeekLimit(){
-        logger.log(Level.INFO,"Resetting weeek limit.");
-        for (Account account : accountRepository.findAll()){
-            account.setWeekLimit(new BigDecimal(0));
+            account.setDayLimit(0);
         }
     }
-
-
 }
