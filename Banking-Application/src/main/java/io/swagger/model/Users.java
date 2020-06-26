@@ -78,6 +78,15 @@ public class Users {
     }
   }
 
+  public Users(Long id, String firstname, String lastname, String email, String password, Boolean isactive, TypeofuserEnum typeofuser) {
+    this.id = id;
+    this.firstname = firstname;
+    this.lastname = lastname;
+    this.email = email;
+    this.password = password;
+    this.isactive = isactive;
+    this.typeofuser = typeofuser;
+  }
 
   public Users(String firstname, String lastname, String email, String password, Boolean isactive, TypeofuserEnum typeofuser) {
     this.firstname = firstname;
@@ -128,6 +137,9 @@ public class Users {
   }
 
   public void setFirstname(String firstname) {
+    if (firstname == ""){
+      throw new IllegalArgumentException("FirstName cannot be empty");
+    }
     this.firstname = firstname;
   }
 
@@ -148,6 +160,9 @@ public class Users {
   }
 
   public void setLastname(String lastname) {
+    if (lastname == ""){
+      throw new IllegalArgumentException("LastName cannot be empty");
+    }
     this.lastname = lastname;
   }
 
@@ -168,6 +183,9 @@ public class Users {
   }
 
   public void setEmail(String email) {
+    if (email == ""){
+      throw new IllegalArgumentException("Email cannot be empty");
+    }
     this.email = email;
   }
 
@@ -188,6 +206,9 @@ public class Users {
   }
 
   public void setPassword(String password) {
+    if (password == ""){
+      throw new IllegalArgumentException("Password cannot be empty");
+    }
     this.password = password;
   }
 

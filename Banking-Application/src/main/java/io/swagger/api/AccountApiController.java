@@ -43,7 +43,7 @@ public class AccountApiController implements AccountApi {
         String accept = request.getHeader("Accept");
         try {
             accountService.CreateAccount(account);
-            return ResponseEntity.status(HttpStatus.OK).body(account);
+            return ResponseEntity.status(HttpStatus.CREATED).body(account);
         } catch (IllegalArgumentException iae) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }

@@ -49,25 +49,25 @@ public class TransactionApiController implements TransactionApi {
     ) {
         String accept = request.getHeader("Accept");
         try {
-
             if(body.getAmount().compareTo(body.getSender().getTransactionLimit()) == 1 || body.getAmount().compareTo(new BigDecimal(0)) == -1){
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Not a valid amount \nPlease choose an amount between 0 and 20000");
             } else if(body.getSender().getBalance().subtract(body.getAmount()).compareTo(body.getSender().getMinimumbalance()) == -1){
-                return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body("There is not enough money on the bank account");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("There is not enough money on the bank account");
             } else if (body.getSender().getNumberOfTransaction() == body.getSender().getDayLimit()) {
-                return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body("You are at your day limit");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("You are at your day limit");
             } else {
                 body.getSender().setNumberOfTransaction(body.getSender().getNumberOfTransaction() + 1);
                 body.getSender().setBalance(body.getSender().getBalance().subtract(body.getAmount()));
                 body.getReceiver().setBalance(body.getReceiver().getBalance().add(body.getAmount()));
                 accountService.updateAccount(body.getSender());
                 accountService.updateAccount(body.getReceiver());
-                transactionService.addTransaction(body);
-                return ResponseEntity.status(HttpStatus.OK).body(body);
+                System.out.println(transactionService.addTransaction(body));
+                return ResponseEntity.status(HttpStatus.CREATED).body(body);
             }
 
         } catch (IllegalArgumentException iae) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            System.out.println(iae);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Invalid Data");
         }
 
     }
@@ -78,11 +78,15 @@ public class TransactionApiController implements TransactionApi {
         return ResponseEntity.status(200).body(transactions);
     }
 
-    public ResponseEntity<Transaction> getTransactionById(@ApiParam(value = "ID of transaction to return",required=true) @PathVariable("transactionId") Long transactionId
+    public ResponseEntity getTransactionById(@ApiParam(value = "ID of transaction to return",required=true) @PathVariable("transactionId") Long transactionId
 ) {
         String accept = request.getHeader("Accept");
         if (accept != null && accept.contains("application/json")) {
+            Transaction transaction = transactionService.getTransactionById(transactionId);
             try {
+                if (transaction == null){
+                    return ResponseEntity.status(404).body("Not a valid ID");
+                }
                 return ResponseEntity.status(200).body(transactionService.getTransactionById(transactionId));
             } catch (IllegalArgumentException iae) {
                 log.error("Not a valid ID", iae);
