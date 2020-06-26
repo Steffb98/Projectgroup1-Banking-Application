@@ -46,8 +46,8 @@ public class UsersApiController implements UsersApi {
         try {
             Boolean checkIfEmailExist = usersService.checkIfEmailExist(body);
             if(checkIfEmailExist == true) {
-                usersService.addUser(body);
-                return ResponseEntity.status(HttpStatus.CREATED).build();
+                Users user = usersService.addUser(body);
+                return ResponseEntity.status(HttpStatus.CREATED).body(user);
             }else{
                 return ResponseEntity.status(401).build();
             }

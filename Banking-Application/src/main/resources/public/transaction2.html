@@ -68,20 +68,16 @@
                 alert("Please choose a bank account where you want to send to");
                 location.reload();
             }
-            else if (amount >= 20000 || amount <= 0){
-                alert("Not a valid amount \nPlease choose an amount between 0 and 20000");
-                location.reload();
-            }
             var sender = getAccountByIban($('#accounts').val().trim());
             var receiver = getAccountByIban(document.getElementById("to").value);
             var by = loggedInUser;
             var transaction = {}
+            transaction["id"] = 0;
             transaction["sender"] = sender;
             transaction["receiver"] = receiver;
             transaction["amount"] = amount;
             transaction["by"] = by;
-            transaction["id"] = 0;
-            transaction["date"] = 0;
+            transaction["date"] = null;
             transaction = JSON.stringify(transaction);
             if(sender.isactive == false){
                 alert("Sender account is not active");
@@ -89,10 +85,6 @@
             }
             else if(receiver.isactive == false){
                 alert("Receiver account is not active");
-                location.reload();
-            }
-            if(sender.balance - amount < sender.minimumbalance){
-                alert("There is not enough money on the bank account");
                 location.reload();
             }
             $.ajax({
@@ -107,17 +99,8 @@
                 success:function(response){
                     window.location = "home.html";
                 },
-                403: function(error){
-                    alert("There is not enough money on the bank account");
-                },
-                400: function(error){
-                    alert("Not a valid amount \nPlease choose an amount between 0 and 20000")
-                },
-                406: function(error){
-                    alert("You are at your day limit")
-                },
                 error: function(error){
-                    alert("invalid data");
+                    alert(error.responseText);
                 }
             });
         });

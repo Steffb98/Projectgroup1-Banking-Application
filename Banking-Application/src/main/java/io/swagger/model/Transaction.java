@@ -6,6 +6,8 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.math.BigDecimal;
+
+import lombok.AllArgsConstructor;
 import org.threeten.bp.OffsetDateTime;
 import org.springframework.validation.annotation.Validated;
 
@@ -48,6 +50,15 @@ public class Transaction   {
   public Transaction id(Long id) {
     this.id = id;
     return this;
+  }
+
+  public Transaction(Long id, Account sender, Account receiver, BigDecimal amount, Users by) {
+    this.id = id;
+    this.sender = sender;
+    this.receiver = receiver;
+    this.amount = amount;
+    this.by = by;
+    this.date = OffsetDateTime.now();
   }
 
   public Transaction(Account sender, Account receiver, BigDecimal amount, Users by) {
@@ -93,6 +104,9 @@ public class Transaction   {
   }
 
   public void setSender(Account sender) {
+    if (sender == null){
+      throw new IllegalArgumentException("Sender cannot be empty");
+    }
     this.sender = sender;
   }
 
@@ -113,6 +127,9 @@ public class Transaction   {
   }
 
   public void setReceiver(Account receiver) {
+    if (receiver == null){
+      throw new IllegalArgumentException("Receiver cannot be empty");
+    }
     this.receiver = receiver;
   }
 
@@ -158,6 +175,9 @@ public class Transaction   {
   }
 
   public void setBy(Users by) {
+    if (by == null){
+      throw new IllegalArgumentException("By cannot be empty");
+    }
     this.by = by;
   }
 
@@ -178,6 +198,9 @@ public class Transaction   {
   }
 
   public void setDate(OffsetDateTime date) {
+    if (date == null){
+      throw new IllegalArgumentException("Date cannot be empty");
+    }
     this.date = date;
   }
 

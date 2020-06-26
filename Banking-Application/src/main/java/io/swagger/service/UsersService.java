@@ -20,9 +20,9 @@ public class UsersService {
         return (List<Users>) usersRepository.findAll();
     }
 
-    public void addUser(Users user) {
+    public Users addUser(Users user) {
         user.setTypeofuser(Users.TypeofuserEnum.CUSTOMER);
-        usersRepository.save(user);
+        return usersRepository.save(user);
     }
     public boolean checkIfEmailExist(Users user){
         Users userEmail = usersRepository.findByEmail(user.getEmail());

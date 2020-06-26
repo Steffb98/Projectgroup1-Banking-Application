@@ -20,9 +20,9 @@ public class TransactionService {
         return (List<Transaction>) transactionRepository.findAll();
     }
 
-    public void addTransaction(Transaction transaction) {
+    public Transaction addTransaction(Transaction transaction) {
         transaction.setDate(OffsetDateTime.now());
-        transactionRepository.save(transaction);
+        return transactionRepository.save(transaction);
     }
 
     public Transaction getTransactionById(Long id) {
