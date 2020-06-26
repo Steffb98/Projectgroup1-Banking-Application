@@ -23,28 +23,40 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         this.service = service;
     }
 
-
     @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(service);
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception{
+        //auth.userDetailsService(service);
+        auth.inMemoryAuthentication().withUser("user").password("{noop}password").roles("USER")
+                .and().withUser("1").password("{noop}1").roles("customer", "ADMIN");
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable();
         http.authorizeRequests()
-                .antMatchers(HttpMethod.GET, "/account/**").permitAll()
-                .antMatchers(HttpMethod.POST, "/account/**").hasRole("employee")
-                .antMatchers(HttpMethod.PUT, "/account/**").hasRole("employee")
+                .antMatchers("/account/**").hasAnyAuthority("USER", "ADMIN")
+                .antMatchers("/account/{accountId}").hasAnyAuthority("USER", "ADMIN")
+                .antMatchers("/account/listaccount").hasAnyAuthority("USER", "ADMIN")
+
+                .antMatchers("/transaction/**").hasAnyAuthority("USER", "ADMIN")
+                .antMatchers("/transaction/{transactionId}").hasAnyAuthority("USER", "ADMIN")
+                .antMatchers("/transaction/account/{accountId}").hasAnyAuthority("USER", "ADMIN")
+                .antMatchers("/transaction/user/{userId}").hasAnyAuthority("USER", "ADMIN")
+
                 .antMatchers("/**").permitAll()
-                .antMatchers(HttpMethod.GET, "/users/**").permitAll()
-                .antMatchers(HttpMethod.PUT, "/users/**").hasRole("employee")
-                .antMatchers(HttpMethod.POST, "/users/**").hasRole("employee")
-                .anyRequest().authenticated()
+
+                .antMatchers("/user/login").permitAll()
+                .antMatchers("/user/logout").hasAnyAuthority("ADMIN", "USER")
+                .antMatchers("/users/**").hasAnyAuthority("ADMIN", "USER")
+                .antMatchers("/users/{id}").hasAnyAuthority("USER", "ADMIN")
+                .antMatchers("/users/search").hasAnyAuthority("USER", "ADMIN")
                 .and()
-                .formLogin().permitAll()
-                .loginProcessingUrl("/performing_login")
-                .defaultSuccessUrl("/index.html", true)
+                .httpBasic()
+                .and()
+                .formLogin()
+                .loginPage("/index.html")
+                .loginProcessingUrl("/perform_login")
+                .defaultSuccessUrl("/HomePage.html", false)
                 .permitAll()
                 .and()
                 .logout()

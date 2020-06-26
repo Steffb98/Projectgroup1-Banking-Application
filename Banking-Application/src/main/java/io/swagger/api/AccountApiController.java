@@ -4,6 +4,7 @@ import io.swagger.model.Account;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.*;
 import io.swagger.service.AccountService;
+import io.swagger.service.UsersService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -30,6 +31,7 @@ public class AccountApiController implements AccountApi {
     private final HttpServletRequest request;
 
     private AccountService accountService;
+    private UsersService usersService;
 
     @org.springframework.beans.factory.annotation.Autowired
     public AccountApiController(ObjectMapper objectMapper, HttpServletRequest request, AccountService accountService) {
@@ -52,22 +54,27 @@ public class AccountApiController implements AccountApi {
     public ResponseEntity<Account> getAccountByIban(@NotNull @ApiParam(value = "Account of iban to show", required = true) @Valid @RequestParam(value = "iban", required = true) String iban
     ) {
         String accept = request.getHeader("Accept");
-        if (accept != null && accept.contains("application/json")) {
-            if (iban.length() == 22) {
-                Account acc = accountService.getAccountByIban(iban);
-                try{
-                    if (acc == null){
-                        throw new IllegalArgumentException();
+        if (accountService.checkAuthorization(iban)){
+            if (accept != null && accept.contains("application/json")) {
+                if (iban.length() == 22) {
+                    Account acc = accountService.getAccountByIban(iban);
+                    try{
+                        if (acc == null){
+                            throw new IllegalArgumentException();
+                        }
+                        else{
+                            return ResponseEntity.status(HttpStatus.OK).body(acc);
+                        }
+                    } catch(IllegalArgumentException iae){
+                        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
                     }
-                    else{
-                        return ResponseEntity.status(HttpStatus.OK).body(acc);
-                    }
-                } catch(IllegalArgumentException iae){
-                    return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+                }
+                else{
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
                 }
             }
             else{
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+                return new ResponseEntity<Account>(HttpStatus.FORBIDDEN);
             }
         }
         else{
@@ -78,11 +85,18 @@ public class AccountApiController implements AccountApi {
     public ResponseEntity<List<Account>> getAccountByUserID(@NotNull @ApiParam(value = "Account of user to show", required = true) @Valid @RequestParam(value = "userId", required = true) Long userId
     ) {
         String accept = request.getHeader("Accept");
-        if (accept != null && accept.contains("application/json")) {
-            try {
-                return ResponseEntity.status(HttpStatus.OK).body(accountService.getAccountsByUserId(userId));
-            } catch (IllegalArgumentException iae) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+
+        if (usersService.checkAuthorization(userId)){
+            List<Account> accountList = accountService.getAccountsByUserId(userId);
+            if (accept != null && accept.contains("application/json")) {
+                try {
+                    return ResponseEntity.status(HttpStatus.OK).body(accountService.getAccountsByUserId(userId));
+                } catch (IllegalArgumentException iae) {
+                    return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+                }
+            }
+            else{
+                return new ResponseEntity<List<Account>>(HttpStatus.FORBIDDEN);
             }
         }
         else{

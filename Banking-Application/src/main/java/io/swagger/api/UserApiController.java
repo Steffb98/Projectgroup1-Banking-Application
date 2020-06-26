@@ -2,6 +2,7 @@ package io.swagger.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.*;
+import io.swagger.model.AuthToken;
 import io.swagger.model.Users;
 import io.swagger.service.UsersService;
 import org.slf4j.Logger;

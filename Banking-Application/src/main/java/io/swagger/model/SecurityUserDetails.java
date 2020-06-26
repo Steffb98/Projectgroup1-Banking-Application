@@ -1,5 +1,6 @@
 package io.swagger.model;
 
+import org.apache.tomcat.util.net.jsse.JSSEImplementation;
 import org.springframework.security.access.method.P;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -9,47 +10,66 @@ import java.util.Collection;
 import java.util.List;
 
 public class SecurityUserDetails implements UserDetails{
-    private final Users user;
+    private Users user;
+
+    private String username;
+    private String password;
+    private Collection<SimpleGrantedAuthority> auth;
+    private boolean active;
+
+    public SecurityUserDetails(String username){
+        this.username = username;
+    }
 
     public SecurityUserDetails(Users user){
         this.user = user;
+        this.username = user.getEmail();
+        this.password = user.getPassword();
+        this.auth = new ArrayList<>();
+
+        if (user.getTypeofuser().name() == "employee"){
+            auth.add(new SimpleGrantedAuthority("ADMIN"));
+        }
+        else if (user.getTypeofuser().name() == "customer"){
+            auth.add(new SimpleGrantedAuthority("USER"));
+        }
+        this.active = user.isIsactive();
     }
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
-        grantedAuthorities.add(new SimpleGrantedAuthority(user.getTypeofuser().name()));
-        return grantedAuthorities;
+        return auth;
     }
 
     @Override
     public String getPassword() {
-        return user.getPassword();
+        return password;
     }
 
     @Override
     public String getUsername() {
-        return user.getEmail();
+        return username;
     }
 
     @Override
     public boolean isAccountNonExpired() {
-        return user.isAccountNonExpired();
+        return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return user.isAccountNonLocked();
+        return active;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return user.isCredentialsNonExpired();
+        return true;
     }
 
     @Override
     public boolean isEnabled() {
-        return user.isEnabled();
+        return active;
     }
 
     public Users getUser(){

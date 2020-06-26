@@ -72,13 +72,5 @@ public class MyApplicationRunner implements ApplicationRunner {
         accountRepository.findAll().forEach(System.out::println);
         usersRepository.findAll().forEach(System.out::println);
         transactionRepository.findAll().forEach(System.out::println);
-
-        Users test = usersRepository.findByEmail("663143@student.inholland.nl");
-        Users test2 = usersRepository.findByEmail("user");
-        test2.setEnabled(true);
-        test.setEnabled(true);
-        usersRepository.save(test);
-        usersRepository.save(test2);
-        usersRepository.findAll().forEach(System.out::println);
     }
 }
