@@ -79,6 +79,9 @@ public class Account   {
   @JsonProperty("transactionlimit")
   private BigDecimal transactionLimit = null;
 
+  @JsonProperty("numberoftransactions")
+  private Integer numberOfTransaction = null;
+
   public Account(TypeofaccountEnum typeofaccount, BigDecimal minimumbalance, Boolean isactive, Long userid) {
     this.iban = GenerateIBAN();
     this.balance = new BigDecimal(0.00);
@@ -88,6 +91,7 @@ public class Account   {
     this.userid = userid;
     this.dayLimit = 5;
     this.transactionLimit = new BigDecimal(20000);
+    this.numberOfTransaction = 0;
   }
 
   public Account() {
@@ -229,6 +233,14 @@ public class Account   {
 
   public void setTransactionLimit(BigDecimal transactionLimit) {
     this.transactionLimit = transactionLimit;
+  }
+
+  public Integer getNumberOfTransaction() {
+    return numberOfTransaction;
+  }
+
+  public void setNumberOfTransaction(Integer numberOfTransaction) {
+    this.numberOfTransaction = numberOfTransaction;
   }
 
   @Override
