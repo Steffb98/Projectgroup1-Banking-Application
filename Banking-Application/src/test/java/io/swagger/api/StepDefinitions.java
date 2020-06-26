@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import io.cucumber.messages.internal.com.google.gson.Gson;
 import io.swagger.dao.AccountRepository;
 import io.swagger.dao.UsersRepository;
 import io.swagger.model.Account;
@@ -109,13 +110,6 @@ public class StepDefinitions {
 
     // ACCOUNT TESTS!!
 
-    @When("I retrieve all accounts")
-    public void iRetrieveAllAccounts() throws URISyntaxException {
-        URI uri = new URI(baseUrl + "account");
-        HttpEntity<String> entity = new HttpEntity<>(null, headers);
-        responseEntity = template.getForEntity(uri, String.class);
-    }
-
     @Then("I get a list of {int} accounts")
     public void iGetAListOfAccounts(int size) throws JSONException {
         response = responseEntity.getBody();
@@ -208,9 +202,22 @@ public class StepDefinitions {
     }
 
     @When("I post a transaction")
-    public void iPostATransaction() throws JsonProcessingException, URISyntaxException {
+    public void iPostATransaction() throws JsonProcessingException, URISyntaxException, JSONException {
+        Gson g = new Gson();
+        URI accountUri = new URI(baseUrl + "account/?iban=NL26%20INHO%204265%209022%2078");
+        responseEntity = template.getForEntity(accountUri, String.class);
+        response = responseEntity.getBody();
+        Account a1 = g.fromJson(response, Account.class);
+        URI account2Uri = new URI(baseUrl + "account/?iban=NL87%20INHO%209418%202570%2078");
+        responseEntity = template.getForEntity(account2Uri, String.class);
+        response = responseEntity.getBody();
+        Account a2 = g.fromJson(response, Account.class);
+        URI userUri = new URI(baseUrl + "users/" + 51);
+        responseEntity = template.getForEntity(userUri, String.class);
+        response = responseEntity.getBody();
+        Users u = g.fromJson(response, Users.class);
         ObjectMapper mapper = new ObjectMapper();
-        transaction = new Transaction(1L, account, account, new BigDecimal(10.00), user);
+        transaction = new Transaction(1L, a1, a2, new BigDecimal(10.00), u);
         URI uri = new URI(baseUrl + "transaction");
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<String> entity = new HttpEntity<>(mapper.writeValueAsString(transaction), headers);

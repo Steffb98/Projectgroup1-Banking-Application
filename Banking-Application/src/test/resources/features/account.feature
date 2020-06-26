@@ -1,7 +1,7 @@
 Feature: Account tests
 
   Scenario: Retrieve one account is status OK
-    When I retrieve account with id "NL62%20INHO%207604%201571%2015"
+    When I retrieve account with id "NL26%20INHO%204265%209022%2078"
     Then I get http status 200
 
   Scenario: Retrieve wrong user is status BAD_REQUEST
