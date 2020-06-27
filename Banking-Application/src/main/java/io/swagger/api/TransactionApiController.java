@@ -20,6 +20,8 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
+import java.util.function.BiFunction;
+
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2020-05-21T13:09:59.263Z[GMT]")
 @CrossOrigin(origins = {"http://localhost"})
 @Controller
@@ -47,12 +49,22 @@ public class TransactionApiController implements TransactionApi {
 ) {
         String accept = request.getHeader("Accept");
         try {
-            transactionService.addTransaction(body);
-            body.getSender().setBalance(body.getSender().getBalance().subtract(body.getAmount()));
-            body.getReceiver().setBalance(body.getReceiver().getBalance().add(body.getAmount()));
-            accountService.updateAmount(body.getSender());
-            accountService.updateAmount(body.getReceiver());
-            return  ResponseEntity.status(HttpStatus.OK).body(body);
+
+        if(body.getAmount().compareTo(body.getSender().getTransactionLimit()) == 1 || body.getAmount().compareTo(new BigDecimal(0)) == -1){
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+            } else if(body.getSender().getBalance().subtract(body.getAmount()).compareTo(body.getSender().getMinimumbalance()) == -1){
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            } else if (transactionService.getAllTransactionsFromAccount(body.getSender().getIban()).size() == body.getSender().getDayLimit()) {
+                return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
+            } else {
+                body.getSender().setBalance(body.getSender().getBalance().subtract(body.getAmount()));
+                body.getReceiver().setBalance(body.getReceiver().getBalance().add(body.getAmount()));
+                accountService.updateAmount(body.getSender());
+                accountService.updateAmount(body.getReceiver());
+                transactionService.addTransaction(body);
+                return ResponseEntity.status(HttpStatus.OK).body(body);
+            }
+
         } catch (IllegalArgumentException iae) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
