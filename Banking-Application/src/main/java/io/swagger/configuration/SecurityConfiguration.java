@@ -35,7 +35,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 .antMatchers("/")
                 .permitAll()
-                // UITGECOMMENT VOOR TESTEN
+                // TODO: Authentication turned off for testing
+                // TODO: Can't create mock authenticated user
+                // TODO: Remove comments for authentication!
                 /*.antMatchers(HttpMethod.GET, "/user/login").permitAll()
                 .antMatchers(HttpMethod.GET, "/user/logout").hasAnyAuthority("EMPLOYEE", "CUSTOMER")
                 .antMatchers(HttpMethod.GET, "/users").hasAnyAuthority("EMPLOYEE", "CUSTOMER")
