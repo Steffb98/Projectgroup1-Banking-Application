@@ -14,7 +14,7 @@ Feature: Users tests
 
   Scenario: Getting a list of all users
     When I retrieve all users
-    Then I get a list of 4 users
+    Then I get a list of 5 users
 
   Scenario: Creating an user
     When I post an user
