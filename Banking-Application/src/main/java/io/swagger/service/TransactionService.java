@@ -15,22 +15,9 @@ import java.util.List;
 
 @Service
 public class TransactionService {
-    @Autowired
+
     private TransactionRepository transactionRepository;
 
-    @Autowired
-    private AccountService accountService;
-
-    public boolean checkAuthorization(String iban){
-        Account acc = accountService.getAccountByIban(iban);
-        Object o = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Users u = ((SecurityUserDetails) o).getUser();
-
-        if (! acc.getUserid().equals(u.getId()) && !((SecurityUserDetails) o).getAuthorities().contains(new SimpleGrantedAuthority("ADMIN"))){
-            return false;
-        }
-        return true;
-    }
 
     public TransactionService(TransactionRepository transactionRepository) {
         this.transactionRepository = transactionRepository;

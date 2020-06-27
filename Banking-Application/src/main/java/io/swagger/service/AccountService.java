@@ -20,21 +20,7 @@ import java.util.NoSuchElementException;
 @Service
 public class AccountService {
 
-    @Autowired
     private AccountRepository accountRepository;
-
-    private static final Logger log = LoggerFactory.getLogger(AccountApiController.class);
-
-    public boolean checkAuthorization(String iban){
-        Account acc = getAccountByIban(iban);
-        Object authDetails = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Users u = ((SecurityUserDetails) authDetails).getUser();
-
-        if (! acc.getUserid().equals(u.getId()) && !((SecurityUserDetails) authDetails).getAuthorities().contains(new SimpleGrantedAuthority("ADMIN"))){
-            return false;
-        }
-        return true;
-    }
 
     public AccountService(AccountRepository accountRepository) {
         this.accountRepository = accountRepository;

@@ -2,17 +2,13 @@ package io.swagger.service;
 
 import io.swagger.api.UsersApiController;
 import io.swagger.dao.UsersRepository;
-import io.swagger.model.Account;
-import io.swagger.model.AuthToken;
 import io.swagger.model.SecurityUserDetails;
 import io.swagger.model.Users;
-import org.apache.catalina.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,21 +16,7 @@ import java.util.List;
 @Service
 public class UsersService {
 
-    @Autowired
     private UsersRepository usersRepository;
-
-    private static final Logger log = LoggerFactory.getLogger(UsersApiController.class);
-
-    public boolean checkAuthorization(Long userId) {
-        Object authDetails = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Users u = ((SecurityUserDetails) authDetails).getUser();
-
-        if (!userId.equals(u.getId()) && ((SecurityUserDetails) authDetails).getAuthorities().contains(new SimpleGrantedAuthority("ADMIN"))){
-            return false;
-        }
-        return true;
-    }
-
 
     public UsersService(UsersRepository usersRepository) {
         this.usersRepository = usersRepository;

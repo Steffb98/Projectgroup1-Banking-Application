@@ -25,38 +25,36 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception{
-        //auth.userDetailsService(service);
-        auth.inMemoryAuthentication().withUser("user").password("{noop}password").roles("USER")
-                .and().withUser("1").password("{noop}1").roles("customer", "ADMIN");
+        auth.userDetailsService(service);
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable();
         http.authorizeRequests()
-                .antMatchers("/account/**").hasAnyAuthority("USER", "ADMIN")
-                .antMatchers("/account/{accountId}").hasAnyAuthority("USER", "ADMIN")
-                .antMatchers("/account/listaccount").hasAnyAuthority("USER", "ADMIN")
-
-                .antMatchers("/transaction/**").hasAnyAuthority("USER", "ADMIN")
-                .antMatchers("/transaction/{transactionId}").hasAnyAuthority("USER", "ADMIN")
-                .antMatchers("/transaction/account/{accountId}").hasAnyAuthority("USER", "ADMIN")
-                .antMatchers("/transaction/user/{userId}").hasAnyAuthority("USER", "ADMIN")
-
-                .antMatchers("/**").permitAll()
-
+                .antMatchers("/")
+                .permitAll()
                 .antMatchers("/user/login").permitAll()
-                .antMatchers("/user/logout").hasAnyAuthority("ADMIN", "USER")
-                .antMatchers("/users/**").hasAnyAuthority("ADMIN", "USER")
-                .antMatchers("/users/{id}").hasAnyAuthority("USER", "ADMIN")
-                .antMatchers("/users/search").hasAnyAuthority("USER", "ADMIN")
+                .antMatchers("/user/logout").hasAnyAuthority("EMPLOYEE", "CUSTOMER")
+                .antMatchers("/users/**").hasAnyAuthority("EMPLOYEE", "CUSTOMER")
+                .antMatchers("/users/{id}").hasAnyAuthority("EMPLOYEE")
+                .antMatchers("/users/search").hasAnyAuthority("EMPLOYEE")
+
+                .antMatchers("/account/**").hasAnyAuthority("EMPLOYEE", "CUSTOMER")
+                .antMatchers("/account/{accountId}").hasAnyAuthority("EMPLOYEE", "CUSTOMER")
+                .antMatchers("/account/listaccount").hasAnyAuthority("EMPLOYEE", "CUSTOMER")
+
+                .antMatchers("/transaction/**").hasAnyAuthority("EMPLOYEE", "CUSTOMER")
+                .antMatchers("/transaction/{transactionId}").hasAnyAuthority("EMPLOYEE", "CUSTOMER")
+                .antMatchers("/transaction/account/{accountId}").hasAnyAuthority("EMPLOYEE", "CUSTOMER")
+                .antMatchers("/transaction/user/{userId}").hasAnyAuthority("EMPLOYEE", "CUSTOMER")
+
+                .anyRequest().authenticated()
+
                 .and()
-                .httpBasic()
-                .and()
-                .formLogin()
-                .loginPage("/index.html")
+                .formLogin().permitAll()
                 .loginProcessingUrl("/perform_login")
-                .defaultSuccessUrl("/HomePage.html", false)
+                .defaultSuccessUrl("/index.html")
                 .permitAll()
                 .and()
                 .logout()
