@@ -33,13 +33,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable();
         http.authorizeRequests()
-                .antMatchers(HttpMethod.GET, "/account/**").permitAll()
-                .antMatchers(HttpMethod.POST, "/account/**").hasRole("employee")
-                .antMatchers(HttpMethod.PUT, "/account/**").hasRole("employee")
-                .antMatchers("/**").permitAll()
-                .antMatchers(HttpMethod.GET, "/users/**").permitAll()
-                .antMatchers(HttpMethod.PUT, "/users/**").hasRole("employee")
-                .antMatchers(HttpMethod.POST, "/users/**").hasRole("employee")
+                .antMatchers("/")
+                .permitAll()
+                .antMatchers(HttpMethod.GET, "/users/**").hasAuthority("EMPLOYEE")
+                .antMatchers(HttpMethod.POST, "/users/**").hasAuthority("EMPLOYEE")
                 .anyRequest().authenticated()
                 .and()
                 .formLogin().permitAll()
