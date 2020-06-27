@@ -228,7 +228,20 @@ public class StepDefinitions {
     }
 
     @When("I post a transaction")
-    public void iPostATransaction() throws JsonProcessingException, URISyntaxException {
+    public void iPostATransaction() throws JsonProcessingException, URISyntaxException, JSONException {
+        Gson g = new Gson();
+        URI accountUri = new URI(baseUrl + "account/?iban=NL26%20INHO%204265%209022%2078");
+        responseEntity = template.getForEntity(accountUri, String.class);
+        response = responseEntity.getBody();
+        Account a1 = g.fromJson(response, Account.class);
+        URI account2Uri = new URI(baseUrl + "account/?iban=NL87%20INHO%209418%202570%2078");
+        responseEntity = template.getForEntity(account2Uri, String.class);
+        response = responseEntity.getBody();
+        Account a2 = g.fromJson(response, Account.class);
+        URI userUri = new URI(baseUrl + "users/" + 51);
+        responseEntity = template.getForEntity(userUri, String.class);
+        response = responseEntity.getBody();
+        Users u = g.fromJson(response, Users.class);
         ObjectMapper mapper = new ObjectMapper();
         transaction = new Transaction(account, account, new BigDecimal(10.00), user);
         URI uri = new URI(baseUrl + "transaction");
