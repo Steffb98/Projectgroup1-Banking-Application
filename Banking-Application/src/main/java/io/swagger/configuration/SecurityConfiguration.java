@@ -35,7 +35,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 .antMatchers("/")
                 .permitAll()
-                .antMatchers(HttpMethod.GET, "/user/login").permitAll()
+                // UITGECOMMENT VOOR TESTEN
+                /*.antMatchers(HttpMethod.GET, "/user/login").permitAll()
                 .antMatchers(HttpMethod.GET, "/user/logout").hasAnyAuthority("EMPLOYEE", "CUSTOMER")
                 .antMatchers(HttpMethod.GET, "/users").hasAnyAuthority("EMPLOYEE", "CUSTOMER")
                 .antMatchers(HttpMethod.PUT, "/users").hasAnyAuthority("EMPLOYEE", "CUSTOMER")
@@ -55,7 +56,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET, "/transaction/account/{accountId}").hasAnyAuthority("EMPLOYEE")
                 .antMatchers(HttpMethod.GET, "/transaction/user/{userId}").hasAnyAuthority("EMPLOYEE", "CUSTOMER")
 
-                .anyRequest().authenticated()
+                .anyRequest().authenticated()*/
 
                 .and()
                 .formLogin().permitAll()

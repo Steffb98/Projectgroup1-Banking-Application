@@ -2,6 +2,8 @@ package io.swagger.api;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.cucumber.java.Before;
+import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.cucumber.messages.internal.com.google.gson.Gson;
@@ -16,6 +18,8 @@ import org.json.JSONObject;
 import org.junit.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
@@ -30,6 +34,7 @@ import org.threeten.bp.OffsetDateTime;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.springframework.security.core.authority.AuthorityUtils.createAuthorityList;
 
 public class StepDefinitions {
 
@@ -261,4 +266,6 @@ public class StepDefinitions {
         URI uri = new URI(baseUrl + "transaction/account/" + id);
         responseEntity = template.getForEntity(uri, String.class);
     }
+
+
 }
