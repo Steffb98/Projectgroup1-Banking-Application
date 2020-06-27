@@ -23,7 +23,10 @@ public class Users {
   @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_seq")
   @JsonProperty("id")
   private Long id = null;
-
+  private boolean isAccountNonExpired = true;
+  private boolean isAccountNonLocked = true;
+  private boolean isCredentialsNonExpired = true;
+  private boolean isEnabled = true;
   @JsonProperty("firstname")
   private String firstname = null;
 
@@ -281,5 +284,37 @@ public class Users {
       return "null";
     }
     return o.toString().replace("\n", "\n    ");
+  }
+
+  public boolean isAccountNonExpired() {
+    return isAccountNonExpired;
+  }
+
+  public void setAccountNonExpired(boolean accountNonExpired) {
+    isAccountNonExpired = accountNonExpired;
+  }
+
+  public boolean isAccountNonLocked() {
+    return isAccountNonLocked;
+  }
+
+  public void setAccountNonLocked(boolean accountNonLocked) {
+    isAccountNonLocked = accountNonLocked;
+  }
+
+  public boolean isCredentialsNonExpired() {
+    return isCredentialsNonExpired;
+  }
+
+  public void setCredentialsNonExpired(boolean credentialsNonExpired) {
+    isCredentialsNonExpired = credentialsNonExpired;
+  }
+
+  public boolean isEnabled() {
+    return isEnabled;
+  }
+
+  public void setEnabled(boolean enabled) {
+    isEnabled = enabled;
   }
 }

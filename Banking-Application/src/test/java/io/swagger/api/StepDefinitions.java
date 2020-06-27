@@ -17,6 +17,7 @@ import org.junit.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import java.math.BigDecimal;
@@ -27,6 +28,7 @@ import java.util.Random;
 
 import org.threeten.bp.OffsetDateTime;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class StepDefinitions {
@@ -47,7 +49,6 @@ public class StepDefinitions {
     @When("I retrieve all users")
     public void iRetrieveAllUsers() throws URISyntaxException {
         URI uri = new URI(baseUrl + "users");
-        HttpEntity<String> entity = new HttpEntity<>(null, headers);
         responseEntity = template.getForEntity(uri, String.class);
     }
 
@@ -56,6 +57,17 @@ public class StepDefinitions {
         response = responseEntity.getBody();
         JSONArray array = new JSONArray(response);
         Assert.assertEquals(size, array.length());
+    }
+
+    @When("I update email and password from user with id {int} email {string} password {string}")
+    public void iUpdateEmailAndPasswordFromUserWithIdEmailPassword(int id, String email, String pwd) throws URISyntaxException {
+        URI uri = new URI(baseUrl + "users?email="+email+"&id="+id+"&password="+pwd);
+        try{
+            template.put(uri, String.class);
+            responseEntity = new ResponseEntity<String>(HttpStatus.OK);
+        } catch (RestClientException RCE){
+            responseEntity = new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+        }
     }
 
     @When("I retrieve user with id {int}")
@@ -77,7 +89,7 @@ public class StepDefinitions {
     public void iPostAnUser() throws JsonProcessingException, URISyntaxException {
         ObjectMapper mapper = new ObjectMapper();
         Integer email = new Random().nextInt(63724);
-        user = new Users(4L,"Tfrtgyest", "hjgjhgk", email.toString(), "45", true, Users.TypeofuserEnum.EMPLOYEE);
+        user = new Users(4L,"Bert", "Jansen", email.toString(), "45", true, Users.TypeofuserEnum.EMPLOYEE);
         URI uri = new URI(baseUrl + "users");
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<String> entity = new HttpEntity<>(mapper.writeValueAsString(user), headers);
@@ -85,12 +97,15 @@ public class StepDefinitions {
     }
 
     @When("I Change the status of an user with id {int}")
-    public void iChangeUserStatusWithId(int id) throws URISyntaxException {
-        ObjectMapper mapper = new ObjectMapper();
-
-        user = new Users("Test", "Employee","456" , "145", true, Users.TypeofuserEnum.EMPLOYEE);
+    public void iChangeUserStatusWithId(int id) throws URISyntaxException, JsonProcessingException {
         URI uri = new URI(baseUrl + "users/" + id);
-        //responseEntity = template.put(uri, mapper);
+        try{
+            template.put(uri, String.class);
+            responseEntity = new ResponseEntity<String>(HttpStatus.OK);
+        } catch (RestClientException RCE){
+            responseEntity = new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+        }
+
     }
 
     @When("I retrieve user with name {string}")
@@ -109,6 +124,18 @@ public class StepDefinitions {
     }
 
     // ACCOUNT TESTS!!
+
+    @When("I change the activity from an account with id {string}")
+    public void iChangeTheActivityFromAnAccountWithId(String iban) throws URISyntaxException {
+        URI uri = new URI(baseUrl + "account/" + iban);
+
+        try{
+            template.put(uri, String.class);
+            responseEntity = new ResponseEntity<String>(HttpStatus.OK);
+        } catch (RestClientException RCE){
+            responseEntity = new ResponseEntity<String>(HttpStatus.NOT_FOUND);
+        }
+    }
 
     @Then("I get a list of {int} accounts")
     public void iGetAListOfAccounts(int size) throws JSONException {
@@ -162,7 +189,6 @@ public class StepDefinitions {
     @When("I retrieve all transaction")
     public void i_retrieve_all_transaction() throws URISyntaxException {
         URI uri = new URI(baseUrl + "transaction");
-        HttpEntity<String> entity = new HttpEntity<>(null, headers);
         responseEntity = template.getForEntity(uri, String.class);
     }
 
@@ -217,7 +243,7 @@ public class StepDefinitions {
         response = responseEntity.getBody();
         Users u = g.fromJson(response, Users.class);
         ObjectMapper mapper = new ObjectMapper();
-        transaction = new Transaction(1L, a1, a2, new BigDecimal(10.00), u);
+        transaction = new Transaction(account, account, new BigDecimal(10.00), user);
         URI uri = new URI(baseUrl + "transaction");
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<String> entity = new HttpEntity<>(mapper.writeValueAsString(transaction), headers);
@@ -227,17 +253,12 @@ public class StepDefinitions {
     @When("I retrieve transaction from user {int}")
     public void iRetrieveTransactionFromUserWithId(int id) throws URISyntaxException {
         URI uri = new URI(baseUrl + "transaction/user/" + id);
-        HttpEntity<String> entity = new HttpEntity<>(null, headers);
         responseEntity = template.getForEntity(uri, String.class);
-
     }
 
     @When("I retrieve transaction from account {string}")
     public void iRetrieveTransactionFromAccountWithId(String id) throws URISyntaxException {
         URI uri = new URI(baseUrl + "transaction/account/" + id);
-        HttpEntity<String> entity = new HttpEntity<>(null, headers);
         responseEntity = template.getForEntity(uri, String.class);
-
     }
-
 }
