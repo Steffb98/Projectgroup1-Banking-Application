@@ -119,10 +119,11 @@ public class UsersApiController implements UsersApi {
         String accept = request.getHeader("Accept");
         if (accept != null && accept.contains("application/json")) {
             try {
-                if(usersService.getUserByName(name).isEmpty()){
+                List<Users> user = usersService.getUserByName(name);
+                if(user.isEmpty()){
                     return ResponseEntity.status(404).build();
                 }else{
-                    return ResponseEntity.status(200).build();
+                    return ResponseEntity.status(200).body(user);
                 }
             } catch (IllegalArgumentException iae) {
                 log.error("The name is not valid", iae);
