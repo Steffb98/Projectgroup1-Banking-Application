@@ -10,7 +10,7 @@ import java.util.List;
 @Service
 public class UsersService {
 
-    private UsersRepository usersRepository;
+    private final UsersRepository usersRepository;
 
     public UsersService(UsersRepository usersRepository) {
         this.usersRepository = usersRepository;
@@ -20,17 +20,13 @@ public class UsersService {
         return (List<Users>) usersRepository.findAll();
     }
 
-    public void addUser(Users user) {
+    public Users addUser(Users user) {
         user.setTypeofuser(Users.TypeofuserEnum.CUSTOMER);
-        usersRepository.save(user);
+        return usersRepository.save(user);
     }
     public boolean checkIfEmailExist(Users user){
         Users userEmail = usersRepository.findByEmail(user.getEmail());
-        if(userEmail != null){
-            return false;
-        }else{
-            return true;
-        }
+        return userEmail == null;
     }
     public Users GetUserByEmail(String email){
         return usersRepository.findByEmail(email);
@@ -44,12 +40,7 @@ public class UsersService {
     public void switchUserStatus(Long id)
     {
         Users u = usersRepository.findOne(id);
-        if(u.isIsactive() == false){
-            u.setIsactive(true);
-        }
-        else{
-            u.setIsactive(false);
-        }
+        u.setIsactive(u.isIsactive() == false);
         usersRepository.save(u);
     }
 

@@ -122,11 +122,15 @@
 
   function CreateAccounts(userid){
     var account = {}
-    account["balance"] = 0;
-    account["iban"] = "";
-    account["isactive"] = true;
     account["minimumbalance"] = -100;
+    account["iban"] = "";
+    account["balance"] = 0;
+    account["typeofaccount"] = "";
+    account["isactive"] = true;
     account["userid"] = userid;
+    account["daylimit"] = 5;
+    account["transactionlimit"] = 20000;
+    account["numberoftransactions"] = 0;
     var succes = true;
     succes = CreateSavingAccount(account);
     if(succes == false){

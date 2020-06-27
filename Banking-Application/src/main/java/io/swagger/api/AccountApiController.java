@@ -43,7 +43,7 @@ public class AccountApiController implements AccountApi {
         String accept = request.getHeader("Accept");
         try {
             accountService.CreateAccount(account);
-            return ResponseEntity.status(HttpStatus.OK).body(account);
+            return ResponseEntity.status(HttpStatus.CREATED).body(account);
         } catch (IllegalArgumentException iae) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
@@ -93,7 +93,6 @@ public class AccountApiController implements AccountApi {
     public ResponseEntity toggleActivityAcc(@ApiParam(value = "AccountID to set to active or inactive",required=true) @PathVariable("accountId") String iban
 )   {
         String accept = request.getHeader("Accept");
-        if (accept != null && accept.contains("application/json")) {
             if (iban.length() == 22) {
                 try{
                     Account acc = accountService.getAccountByIban(iban);
@@ -110,10 +109,6 @@ public class AccountApiController implements AccountApi {
             }else{
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
             }
-        }
-        else{
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        }
     }
 
 }

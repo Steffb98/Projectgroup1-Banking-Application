@@ -28,6 +28,9 @@ public class Account   {
   @JsonProperty("iban")
   private String iban = null;
 
+  @JsonProperty("minimumbalance")
+  private BigDecimal minimumbalance = null;
+
   @JsonProperty("balance")
   private BigDecimal balance = null;
 
@@ -64,9 +67,6 @@ public class Account   {
   @JsonProperty("typeofaccount")
   private TypeofaccountEnum typeofaccount = null;
 
-  @JsonProperty("minimumbalance")
-  private BigDecimal minimumbalance = null;
-
   @JsonProperty("isactive")
   private Boolean isactive = null;
 
@@ -79,15 +79,31 @@ public class Account   {
   @JsonProperty("transactionlimit")
   private BigDecimal transactionLimit = null;
 
+  @JsonProperty("numberoftransactions")
+  private Integer numberOfTransaction = null;
+
+  public Account(String iban, BigDecimal balance, TypeofaccountEnum typeofaccount, BigDecimal minimumbalance, Boolean isactive, Long userid, Integer dayLimit, BigDecimal transactionLimit, Integer numberOfTransaction) {
+    this.minimumbalance = minimumbalance;
+    this.iban = iban;
+    this.balance = balance;
+    this.typeofaccount = typeofaccount;
+    this.isactive = isactive;
+    this.userid = userid;
+    this.dayLimit = dayLimit;
+    this.transactionLimit = transactionLimit;
+    this.numberOfTransaction = numberOfTransaction;
+  }
+
   public Account(TypeofaccountEnum typeofaccount, BigDecimal minimumbalance, Boolean isactive, Long userid) {
+    this.minimumbalance = minimumbalance;
     this.iban = GenerateIBAN();
     this.balance = new BigDecimal(0.00);
     this.typeofaccount = typeofaccount;
-    this.minimumbalance = minimumbalance;
     this.isactive = isactive;
     this.userid = userid;
     this.dayLimit = 5;
     this.transactionLimit = new BigDecimal(20000);
+    this.numberOfTransaction = 0;
   }
 
   public Account() {
@@ -131,6 +147,9 @@ public class Account   {
   }
 
   public void setBalance(BigDecimal balance) {
+    if (balance.intValue() < this.minimumbalance.intValue()){
+      throw new IllegalArgumentException("Balance cannot be below the minimum balance");
+    }
     this.balance = balance;
   }
 
@@ -172,6 +191,9 @@ public class Account   {
   }
 
   public void setMinimumbalance(BigDecimal minimumbalance) {
+    if (minimumbalance.intValue() > 0){
+      throw new IllegalArgumentException("Minimum balance cannot be above zero");
+    }
     this.minimumbalance = minimumbalance;
   }
 
@@ -220,6 +242,9 @@ public class Account   {
   }
 
   public void setDayLimit(Integer dayLimit) {
+    if (dayLimit < 0){
+      throw new IllegalArgumentException("DayLimit cannot be below zero");
+    }
     this.dayLimit = dayLimit;
   }
 
@@ -228,7 +253,21 @@ public class Account   {
   }
 
   public void setTransactionLimit(BigDecimal transactionLimit) {
+    if (transactionLimit.intValue() < 0){
+      throw new IllegalArgumentException("TransactionLimit cannot be below zero");
+    }
     this.transactionLimit = transactionLimit;
+  }
+
+  public Integer getNumberOfTransaction() {
+    return numberOfTransaction;
+  }
+
+  public void setNumberOfTransaction(Integer numberOfTransaction) {
+    if (numberOfTransaction < 0){
+      throw new IllegalArgumentException("NumberOfTransaction cannot be below zero");
+    }
+    this.numberOfTransaction = numberOfTransaction;
   }
 
   @Override

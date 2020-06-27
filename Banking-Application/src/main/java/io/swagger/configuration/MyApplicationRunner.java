@@ -20,8 +20,8 @@ import java.util.function.BiFunction;
 @Component
 public class MyApplicationRunner implements ApplicationRunner {
 
-    private TransactionRepository transactionRepository;
-    private UsersRepository usersRepository;
+    private final TransactionRepository transactionRepository;
+    private final UsersRepository usersRepository;
     private AccountRepository accountRepository;
 
     public MyApplicationRunner(TransactionRepository transactionRepository, UsersRepository usersRepository, AccountRepository accountRepository) {
