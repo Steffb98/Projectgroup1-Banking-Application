@@ -84,15 +84,12 @@ public class UsersApiController implements UsersApi {
 ,@ApiParam(value = "New password",required=true) @Valid @RequestParam(value = "password", required = true) String password
 ) {
         String accept = request.getHeader("Accept");
-        if(accept != null && accept.contains("application/json")) {
             try {
                 usersService.updateUser(id, email, password);
                 return ResponseEntity.status(HttpStatus.OK).body(usersService.getAllUsers());
             } catch (IllegalArgumentException iae) {
                 return ResponseEntity.status(400).build();
             }
-        }
-        return new ResponseEntity<Users>(HttpStatus.NOT_IMPLEMENTED);
     }
 
     public ResponseEntity<Users> userid(@ApiParam(value = "ID of specific user",required=true) @PathVariable("id") Long id
